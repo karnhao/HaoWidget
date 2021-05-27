@@ -1,25 +1,102 @@
 {
+    "classId" : 72610,
     "className" : "ม.6/10",
     "startTime" : 500,
     "classWidth" : 50,
     "subjectList" : {
-        "Sunday" : [
+        "0" : [],
+        "1" : [
             {
-                "name" : "asdasdasdascx",
+                "id" : "อ33205",
+                "name" : "อังกฤษ (ชาวต่างชาติ)",
+                "teacher" : "Mr. Jomer Fonclara Piang",
+                "roomId" : "947",
                 "width" : 50
             },
             {
-                "name" : "uiyhjhmgh",
+                "id" : "ส33101",
+                "name" : "ประวัติศาสตร์",
+                "teacher" : "ครูธเนศ วิริยะมนตรี",
+                "roomId" : "947",
+                "width" : 50
+            },
+            {
+                "id" : "ว30250",
+                "name" : "ชีวะวิทยา",
+                "teacher" : "ครูพรพิมล จงรักวิทย์",
+                "roomId" : "236",
+                "width" : 50
+            },
+            {
+                "id" : "ว30250",
+                "name" : "ชีวะวิทยา",
+                "teacher" : "ครูพรพิมล จงรักวิทย์",
+                "roomId" : "236",
+                "width" : 50
+            },
+            {
+                "id" : null,
+                "name" : "พักกลางวัน",
+                "teacher" : null,
+                "roomId" : null,
+                "width" : 50
+            },
+            {
+                "id" : "พ30205",
+                "name" : "วอลเลย์บอล",
+                "teacher" : "ครูเฉลิมศรี เกตุจำปา",
+                "roomId" : "โดม2",
+                "width" : 50
+            },
+            {
+                "id" : "ท33101",
+                "name" : "ภาษาไทย",
+                "teacher" : "ครูเฉลิมศรี เกตุจำปา",
+                "roomId" : "947",
+                "width" : 50
+            },
+            {
+                "id" : "ค33209",
+                "name" : "คณิตศาสตร์ O-Net1",
+                "teacher" : "Math LJK Chnnel ()",
+                "roomId" : "947",
                 "width" : 50
             }
         ],
-        "Monday" : [
+        "2" : [
             {
-                "name" : "ภาษาไทย",
+                "id" : "ว30210",
+                "name" : "ฟิสิกส์",
+                "teacher" : "ครูวนิดา หลากจิตร",
+                "roomId" : "246",
                 "width" : 50
             },
             {
-                "name" : "เคมี",
+                "id" : "ว30210",
+                "name" : "ฟิสิกส์",
+                "teacher" : "ครูวนิดา หลากจิตร",
+                "roomId" : "246",
+                "width" : 50
+            },
+            {
+                "id" : "ค33201",
+                "name" : "เสริมทักษะคณิตศาสตร์ 5",
+                "teacher" : "ครูอรนันท์ จันทร์ประภาพ",
+                "roomId" : "947",
+                "width" : 50
+            },
+            {
+                "id" : "พ33101",
+                "name" : "สุขศึกษา",
+                "teacher" : "ครูทิพรวี เตชะหงษา",
+                "roomId" : "947",
+                "width" : 50
+            },
+            {
+                "id" : null,
+                "name" : "พักกลางวัน",
+                "teacher" : null,
+                "roomId" : null,
                 "width" : 50
             }
         ]
