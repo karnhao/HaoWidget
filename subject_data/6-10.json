@@ -1,0 +1,27 @@
+{
+    "className" : "ม.6/10",
+    "startTime" : 500,
+    "classWidth" : 50,
+    "subjectList" : {
+        "Sunday" : [
+            {
+                "name" : "asdasdasdascx",
+                "width" : 50
+            },
+            {
+                "name" : "uiyhjhmgh",
+                "width" : 50
+            }
+        ],
+        "Monday" : [
+            {
+                "name" : "ภาษาไทย",
+                "width" : 50
+            },
+            {
+                "name" : "เคมี",
+                "width" : 50
+            }
+        ]
+    }
+}
