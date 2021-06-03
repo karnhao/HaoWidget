@@ -3,6 +3,7 @@
     "className": "ม.6/10",
     "startTime": 500,
     "classWidth": 50,
+    "nullMessage": "null",
     "subjectList": {
         "_0": [],
         "_1": [
