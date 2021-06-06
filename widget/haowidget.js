@@ -1,6 +1,6 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
-// icon-color: purple; icon-glyph: syringe;
+// icon-color: deep-gray; icon-glyph: magic;
 /*
   วิทเจ็ท (วิจิท) แสดงตารางสอน
   
@@ -38,6 +38,49 @@
 // code >>
 
 var widgetFamily = config.widgetFamily;
+
+Notification.removeAllPending();
+
+// load file.
+let fm = FileManager.local();
+let path = null;
+let raw_json = null;
+if (fm.bookmarkExists("HaoWidget")) {
+    path = fm.bookmarkedPath("HaoWidget") + "/subject_data.js";
+} else {
+    let message = "กรุณาเพิ่ม Bookmark ในแอพ Scriptable ที่ชื่อ HaoWidget\n(เพื่อเป็นการบันทึกข้อมูลวิชาที่จะใช้ในกรณีที่ไม่มีการเชื่อมต่อกับอินเทอร์เน็ต.)";
+    console.warn(message);
+    let n = new Notification();
+    n.title = "คำเตือน";
+    n.body = message;
+    n.addAction("Open app", "scriptable:///", false);
+    n.addAction("Open Script", "scriptable:///run/Untitled%20Script%204", false)
+    await n.schedule();
+}
+
+if (config.runsInWidget || args.shortcutParameter) {
+    let request = new Request("https://raw.githubusercontent.com/karnhao/HaoWidget/main/subject_data/6-10/6-10.json");
+    try {
+        raw_json = await request.loadJSON();
+        if (path) {
+            fm.writeString(path, JSON.stringify(raw_json));
+        }
+    } catch (e) {
+        console.log(e.message);
+        try {
+            if (fm.fileExists(path)) {
+                raw_json = JSON.parse(fm.readString(path));
+            } else {
+                throw new Error();
+            }
+        } catch (e) {
+            throw new Error("การโหลดไฟล์ล้มเหลวและไม่พบไฟล์ข้อมูลเก่า.");
+        }
+
+    }
+}
+
+
 
 class ClassData {
 
@@ -246,6 +289,10 @@ class SubjectDay {
             return null;
         }
     }
+    /**
+     * 
+     * @returns {Subject[]} วิชา
+     */
     getSubjectList() {
         return this.subject;
     }
@@ -278,6 +325,20 @@ class SubjectDay {
             p++;
         }
         return p;
+    }
+    /**
+     * 
+     * @returns {String} ข้อมูลวิชาในวันนี้ที่มนุษย์สามารถอ่านได้ง่าย.
+     */
+    getLocaleSubjectList() {
+        if (!this.getSubjectList().length) {
+            return "ไม่มีข้อมูล";
+        }
+        let out = "";
+        this.getSubjectList().forEach((t) => {
+            out += t.getLocaleString();
+        });
+        return out;
     }
 }
 class Subject {
@@ -357,6 +418,9 @@ class Subject {
     getId() {
         return this.id;
     }
+    getLocaleId() {
+        return this.getId() ? this.getId().replaceAll("", " ").trim() : "ไม่ทราบ";
+    }
     /**
      * 
      * @returns ชื่อวิชา
@@ -376,7 +440,15 @@ class Subject {
      * @returns รายชื่อครูประจำวิชาในภาษามนุษย์ทั่วไป
      */
     getLocaleTeacherName() {
-        return this.teacher.toString();
+        if (!this.getTeacher()) {
+            return "ไม่ทราบ";
+        }
+        let t_arr = this.teacher;
+        let out = "";
+        for (let i = 0; i < t_arr.length; i++) {
+            out += (i == t_arr.length - 1) ? `${t_arr[i]}` : `${t_arr[i]} และ `;
+        }
+        return out;
     }
     /**
      * 
@@ -384,6 +456,21 @@ class Subject {
      */
     getRoomId() {
         return this.roomId;
+    }
+    /**
+     * 
+     * @returns {String}
+     */
+    getLocaleRoomId() {
+        if (!this.getRoomId()) {
+            return "ไม่ทราบ";
+        }
+        let ins = this.getRoomId();
+        let out = ins[0];
+        for (let i = 1; i < ins.length; i++) {
+            out += (isNaN(ins[i]) || ins[i].match("\\s+") || ins[i - 1].match("\\s+") ? ins[i] : ` ${ins[i]}`)
+        }
+        return out;
     }
     /**
      * 
@@ -422,55 +509,27 @@ class Subject {
     getLocaleTime() {
         return `${this.getLocaleStartTime()}-${this.getLocaleEndTime()}`;
     }
-}
-
-/**
- * ส่งกลับวันจากนาที
- * @param {number} minute 
- * @returns {Date} วัน
- * @author Sittipat Tepsutar
- */
-function getDateFromMinute(minute) {
-    let returndate = new Date();
-    returndate.setHours(Math.floor(minute / 60));
-    returndate.setMinutes(minute % 60);
-    returndate.setSeconds(0);
-    returndate.setMilliseconds(0);
-    return returndate;
-}
-
-/**
- * คำนวนเวลา(ในรูปแบบข้อความ string)จากนาที
- * @param {number} minute
- * @returns เวลา
- * @author Sittipat Tepsutar
- * @see getDateFromMinute
- */
-function getLocalTimeStringFromMinute(minute) {
-    if (minute == Infinity) {
-        return ".....";
+    /**
+     * ส่งกลับข้อความที่เป็นภาษามนุษย์
+     * @returns {String} ข้อความที่มนุษย์อ่านได้
+     */
+    getLocaleString() {
+        return ` คาบที่ ${this.getPeriod() + 1} ของวัน. วิชา ${this.getName()}. รหัส ${this.getLocaleId()}.`
+            + ` เรียนที่ ${this.getLocaleRoomId()}.`
+            + ` ตั้งแต่เวลา ${this.getLocaleStartTime()} น. ถึง ${this.getLocaleEndTime()} น. เป็นเวลา ${this.getWidth()} นาที.`
+            + ` ครูผู้สอนคือ ${this.getLocaleTeacherName()}.`;
     }
-    let pad = (d) => (d < 10) ? '0' + d.toString() : d.toString();
-    let t1 = getDateFromMinute(minute);
-    return `${pad(t1.getHours())}:${pad(t1.getMinutes())}`;
 }
 
-/**
- * ฟังก์ชันนี้จะรับวัตถุวันมาแล้วจะส่งออกข้อมูลในรูปแบบตัวเลขในหน่วยนาทีตั้งแต่จุดเริ่มต้นของวัน
- * @param {Date} date วัตถุวันที่อยู่ในแม่พิมพ์ Date
- * @returns นาทีตั้งแต่จุดเริ่มต้นของวัน
- */
- function getTimeMinute(date) {
-    return (date instanceof Date) ? date.getHours() * 60 + date.getMinutes() : null;
+// SET DATA
+if (raw_json) {
+    ;
+    ClassData.setData(raw_json);
 }
 
 // global current date day
 const currentDate = new Date();
 var currentDay = currentDate.getDay();
-var currentMinutes = getTimeMinute(currentDate);
-var currentSubjectDay = ClassData.get(currentDate);
-var currentPariod = currentSubjectDay.getPeriodByTime(currentMinutes);
-var currentSubject = currentSubjectDay.getSubject(currentPariod);
 
 // widget parameter >>
 if (args.widgetParameter != null) {
@@ -482,6 +541,14 @@ if (args.widgetParameter != null) {
         }
     }
 }
+
+if (config.runsInWidget || args.shortcutParameter) {
+    var currentMinutes = getTimeMinute(currentDate);
+    var currentSubjectDay = ClassData.get(currentDay);
+    var currentPariod = currentSubjectDay.getPeriodByTime(currentMinutes);
+    var currentSubject = currentSubjectDay.getSubject(currentPariod);
+}
+
 // end widget parameter //
 
 // Main
@@ -494,13 +561,24 @@ if (config.runsInWidget) {
 
 } else if (args.shortcutParameter) {
     let input = args.shortcutParameter.split(" ");
-    let next = 0;
-    if (!(Number.isNaN(parseInt(input[1])))) {
-        next = parseInt(input[1]);
-    }
+    let p = currentPariod;
+    let d = currentDay;
     if (input[0].toLowerCase().trim() == "getSubject".toLowerCase().trim()) {
-        // Script.setShortcutOutput(getSubject(currentDay, getClassHour(getTimeMinute(currentDate)), next));
-        Script.setShortcutOutput(currentSubjectDay.getSubject(currentPariod + next));
+        switch (input.length) {
+            case 2:
+                try {
+                    p = parseInt(input[1]);
+                } catch (e) { };
+                break;
+            case 3:
+                try {
+                    p = parseInt(input[2]);
+                    d = parseInt(input[1]);
+                } catch (e) { };
+                break;
+            default: ;
+        }
+        Script.setShortcutOutput(JSON.stringify(ClassData.get(d).getSubject(p)));
         Script.complete();
     } else {
         Script.setShortcutOutput("Error : มีบางอย่างผิดพลาด");
@@ -696,7 +774,7 @@ async function createWidget() {
                     } else {
                         t0 = body1.addText(": ");
                     }
-                    
+
                     t0.font = new Font("default", 10);
                     t0.lineLimit = 1;
                 }
@@ -908,12 +986,12 @@ async function createWidget() {
                 b0i.centerAlignContent();
                 b0i.size = new Size(b0.size.width, b0.size.height / 4);
                 let t;
-                if (currentSubjectDay.getSubject(ch)) {
-                    t = b0i.addText("");
-                } else {
+                if (currentSubjectDay.getSubject(ch - 1)) {
                     t = b0i.addText(ch.toString());
+                } else {
+                    t = b0i.addText("");
                 }
-                if (currentPariod == ch) {
+                if (currentPariod + 1 == ch) {
                     t.font = pf;
                     t.textColor = pc;
                 } else {
@@ -934,13 +1012,13 @@ async function createWidget() {
                 bi.centerAlignContent();
                 bi.size = new Size(b1.size.width, b1.size.height / 4);
                 let t;
-                if (currentSubjectDay.getSubject(ch)) {
-                    t = bi.addText("");
+                if (currentSubjectDay.getSubject(ch - 1)) {
+                    t = bi.addText(currentSubjectDay.getSubject(ch - 1).getName());
                 } else {
-                    t = bi.addText(currentSubjectDay.getSubject(ch - 1));
+                    t = bi.addText("");
                 }
 
-                if (currentPariod == ch) {
+                if (currentPariod + 1 == ch) {
                     t.font = pf;
                     t.textColor = pc;
                 } else {
@@ -962,14 +1040,14 @@ async function createWidget() {
                 bi.centerAlignContent();
                 bi.size = new Size(b2.size.width, b2.size.height / 4);
                 let t;
-                if (currentSubjectDay.getSubject(ch)) {
-                    t = bi.addText("");
+                if (currentSubjectDay.getSubject(ch - 1)) {
+                    t = bi.addText(currentSubjectDay.getSubject(ch - 1).getLocaleTime());
                 } else {
-                    t = bi.addText(currentSubjectDay.getSubject(ch).getLocaleTime());
+                    t = bi.addText("");
                 }
 
                 bi.addSpacer();
-                if (currentPariod == ch) {
+                if (currentPariod + 1 == ch) {
                     t.font = pf;
                     t.textColor = pc;
                 } else {
@@ -1023,9 +1101,9 @@ async function createWidget() {
                     let ch = currentPariod + 1 + i;
                     let ct1;
                     if (currentSubjectDay.getSubject(ch)) {
-                        ct1 = title111.addText(": ");
-                    } else {
                         ct1 = title111.addText(": " + currentSubjectDay.getSubject(ch).getName());
+                    } else {
+                        ct1 = title111.addText(": ");
                     }
                     ct1.font = new Font("default", 10);
                     ct1.lineLimit = 1;
@@ -1098,6 +1176,46 @@ async function rw(notify) {
     })
 }
 
+/**
+ * ส่งกลับวันจากนาที
+ * @param {number} minute 
+ * @returns {Date} วัน
+ * @author Sittipat Tepsutar
+ */
+function getDateFromMinute(minute) {
+    let returndate = new Date();
+    returndate.setHours(Math.floor(minute / 60));
+    returndate.setMinutes(minute % 60);
+    returndate.setSeconds(0);
+    returndate.setMilliseconds(0);
+    return returndate;
+}
+
+/**
+ * คำนวนเวลา(ในรูปแบบข้อความ string)จากนาที
+ * @param {number} minute
+ * @returns เวลา
+ * @author Sittipat Tepsutar
+ * @see getDateFromMinute
+ */
+function getLocalTimeStringFromMinute(minute) {
+    if (minute == Infinity) {
+        return "00:00";
+    }
+    let pad = (d) => (d < 10) ? '0' + d.toString() : d.toString();
+    let t1 = getDateFromMinute(minute);
+    return `${pad(t1.getHours())}:${pad(t1.getMinutes())}`;
+}
+
+/**
+ * ฟังก์ชันนี้จะรับวัตถุวันมาแล้วจะส่งออกข้อมูลในรูปแบบตัวเลขในหน่วยนาทีตั้งแต่จุดเริ่มต้นของวัน
+ * @param {Date} date วัตถุวันที่อยู่ในแม่พิมพ์ Date
+ * @returns นาทีตั้งแต่จุดเริ่มต้นของวัน
+ */
+function getTimeMinute(date) {
+    return (date instanceof Date) ? date.getHours() * 60 + date.getMinutes() : null;
+}
+
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -1156,11 +1274,7 @@ async function getRandomBackgroundImage(forceUrl) {
             "https://images2.alphacoders.com/110/1109233.jpg",
             "https://images.alphacoders.com/110/1109227.jpg",
             "https://images5.alphacoders.com/112/1123013.jpg",
-            "https://images.wallpaperscraft.com/image/matrix_code_numbers_147523_3840x2160.jpg",
-            "https://images.wallpapersden.com/image/download/binary-5k-colorful_bGVubW2UmZqaraWkpJRnamtlrWZpaWU.jpg",
-            "https://www.history.com/.image/t_share/MTY4OTUzMDI2NjI5ODcxNDI3/illuminati-gettyimages-188003212.jpg",
-            "https://image.freepik.com/free-vector/colorful-palm-silhouettes-background_23-2148541792.jpg",
-            "https://static.thairath.co.th/media/dFQROr7oWzulq5Fa4V4Ji09chhs5ujcqdWcPnbGDQcswnl3UDdVYVBgEbro7ADad6pl.jpg"
+            "https://image.freepik.com/free-vector/colorful-palm-silhouettes-background_23-2148541792.jpg"
         ]
     } else {
         //White mode background image.
