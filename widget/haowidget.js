@@ -46,7 +46,7 @@ let fm = FileManager.local();
 let path = null;
 let raw_json = null;
 if (fm.bookmarkExists("HaoWidget")) {
-    path = fm.bookmarkedPath("HaoWidget") + "/subject_data.js";
+    path = fm.bookmarkedPath("HaoWidget") + "/subject_data.json";
 } else {
     let message = "กรุณาเพิ่ม Bookmark ในแอพ Scriptable ที่ชื่อ HaoWidget\n(เพื่อเป็นการบันทึกข้อมูลวิชาที่จะใช้ในกรณีที่ไม่มีการเชื่อมต่อกับอินเทอร์เน็ต.)";
     console.warn(message);
@@ -54,7 +54,7 @@ if (fm.bookmarkExists("HaoWidget")) {
     n.title = "คำเตือน";
     n.body = message;
     n.addAction("Open app", "scriptable:///", false);
-    n.addAction("Open Script", "scriptable:///run/Untitled%20Script%204", false)
+    n.addAction("Open Script", `scriptable:///open/${Script.name()}`, false)
     await n.schedule();
 }
 
@@ -74,7 +74,7 @@ if (config.runsInWidget || args.shortcutParameter) {
                 throw new Error();
             }
         } catch (e) {
-            throw new Error("การโหลดไฟล์ล้มเหลวและไม่พบไฟล์ข้อมูลเก่า.");
+            throw new Error("การโหลดไฟล์ล้มเหลวและไม่พบไฟล์ข้อมูลเก่า. คำแนะนำ : ทำให้แน่ใจว่าอุปกรณ์เชื่อมต่อกับอินเทอร์เน็ตอยู่ และ refresh widget ใหม่.");
         }
 
     }
@@ -82,36 +82,221 @@ if (config.runsInWidget || args.shortcutParameter) {
 
 
 
-class ClassData {
-
-    static data = {
-        'startTime': 0,
-        'classId': '',
-        'className': '',
-        'nullSubject': null
+var Subject = /** @class */ (function () {
+    function Subject(name) {
+        this.width = 0;
+        this.startTime = 0;
+        this.period = -1;
+        this.name = "";
+        this.id = "";
+        this.roomId = "";
+        this.teacher = [];
+        if (name) {
+            this.name = name;
+        }
     }
-
     /**
-     * 
-     * @param {Number} day ตัวเลขจำนวนเต็ม. 
-     * @returns {SubjectDay} ถ้า parameter เป็น null จะส่งค่ากลับในรูปแบบ Array.
+     *
+     * @param {String} id รหัสวิชา.
      */
-    static get(day) {
-        return SubjectDay.get(day);
+    Subject.prototype.setId = function (id) {
+        this.id = id;
+    };
+    /**
+     *
+     * @param {String} name ชื่อวิชา.
+     */
+    Subject.prototype.setName = function (name) {
+        if (typeof name == "string") {
+            this.name = name;
+            return;
+        }
+        throw new TypeError("Parameter ต้องเป็น string.");
+    };
+    /**
+     *
+     * @param  {String[]} teacher รายชื่อครูประจำวิชา (array).
+     */
+    Subject.prototype.setTeacher = function (teacher) {
+        this.teacher = teacher;
+    };
+    /**
+     *
+     * @param {String} roomId ชื่อห้องเรียนหรือรหัสห้องเรียน.
+     */
+    Subject.prototype.setRoomId = function (roomId) {
+        this.roomId = roomId;
+    };
+    /**
+     *
+     * @param {Number} number ระยะเวลาเรียน หน่วยเป็นนาที.
+     */
+    Subject.prototype.setWidth = function (number) {
+        if (typeof number == "number" || number == null) {
+            this.width = number;
+        }
+        else {
+            throw new TypeError("Parameter \u0E15\u0E49\u0E2D\u0E07\u0E40\u0E1B\u0E47\u0E19\u0E15\u0E31\u0E27\u0E40\u0E25\u0E02\u0E40\u0E17\u0E48\u0E32\u0E19\u0E31\u0E49\u0E19. : " + number);
+        }
+    };
+    /**
+     * @param {Number} number หมายเลขคาบในวิชา.
+     */
+    Subject.prototype.setPeriod = function (number) {
+        if (typeof number == "number" || !number) {
+            if (!Number.isInteger(number) && number)
+                throw new TypeError("Parameter \u0E15\u0E49\u0E2D\u0E07\u0E40\u0E1B\u0E47\u0E19\u0E15\u0E31\u0E27\u0E40\u0E25\u0E02\u0E17\u0E35\u0E48\u0E40\u0E1B\u0E47\u0E19\u0E08\u0E33\u0E19\u0E27\u0E19\u0E40\u0E15\u0E47\u0E21\u0E40\u0E17\u0E48\u0E32\u0E19\u0E31\u0E49\u0E19. : " + number);
+            else
+                this.period = number;
+        }
+        else {
+            throw new TypeError("Parameter \u0E15\u0E49\u0E2D\u0E07\u0E40\u0E1B\u0E47\u0E19\u0E15\u0E31\u0E27\u0E40\u0E25\u0E02\u0E40\u0E17\u0E48\u0E32\u0E19\u0E31\u0E49\u0E19. : " + number);
+        }
+    };
+    /**
+     * @param {Number} time เวลาในหน่วยนาที นับตั้งแต่ 0:00น.
+     */
+    Subject.prototype.setStartTime = function (time) {
+        this.startTime = time;
+    };
+    /**
+     *
+     * @returns {String} รหัสวิชา
+     */
+    Subject.prototype.getId = function () {
+        return this.id;
+    };
+    Subject.prototype.getLocaleId = function () {
+        return this.getId() ? this.getId().replaceAll("", " ").trim() : "ไม่มีข้อมูล";
+    };
+    /**
+     *
+     * @returns {String} ชื่อวิชา
+     */
+    Subject.prototype.getName = function () {
+        return this.name;
+    };
+    /**
+     *
+     * @returns รายชื่อครูประจำวิชา (array).
+     */
+    Subject.prototype.getTeacher = function () {
+        return this.teacher;
+    };
+    /**
+     *
+     * @returns รายชื่อครูประจำวิชาในภาษามนุษย์ทั่วไป
+     */
+    Subject.prototype.getLocaleTeacherName = function () {
+        if (!this.getTeacher()) {
+            return "ไม่มีข้อมูล";
+        }
+        var t_arr = this.teacher;
+        var out = "";
+        for (var i = 0; i < t_arr.length; i++) {
+            out += (i == t_arr.length - 1) ? "" + t_arr[i] : t_arr[i] + " \u0E41\u0E25\u0E30 ";
+        }
+        return out;
+    };
+    /**
+     *
+     * @returns ชื่อห้องเรียนหรือรหัสห้องเรียน.
+     */
+    Subject.prototype.getRoomId = function () {
+        return this.roomId;
+    };
+    /**
+     *
+     * @returns {String}
+     */
+    Subject.prototype.getLocaleRoomId = function () {
+        if (!this.getRoomId()) {
+            return "ไม่มีข้อมูล";
+        }
+        var ins = this.getRoomId();
+        var out = ins[0];
+        for (var i = 1; i < ins.length; i++) {
+            out += isNaN(Number(ins[i])) || ins[i].match("\\s+") || ins[i - 1].match("\\s+") ? ins[i] : " " + ins[i];
+        }
+        return out;
+    };
+    /**
+     *
+     * @returns ระยะเวลาเรียน หน่วยเป็นนาที.
+     */
+    Subject.prototype.getWidth = function () {
+        return this.width;
+    };
+    /**
+     *
+     * @returns หมายเลขคาบในวิชา.
+     */
+    Subject.prototype.getPeriod = function () {
+        return this.period;
+    };
+    Subject.prototype.getLocalePeriod = function () {
+        var out = this.getPeriod();
+        if (typeof (out) === 'number') {
+            return out.toString();
+        }
+        return "NULL";
+    };
+    /**
+     *
+     * @returns เวลาเมื่อเริ่มต้นคาบเรียนในรูปแบบนาทีที่นับตั้งแต่ 0:00น.
+     */
+    Subject.prototype.getStartTime = function () {
+        return this.startTime;
+    };
+    Subject.prototype.getLocaleStartTime = function () {
+        return getLocalTimeStringFromMinute(this.getStartTime());
+    };
+    /**
+     *
+     * @returns {Number} เวลาเมื่อจบคาบเรียนในรูปแบบนาทีที่นับตั้งแต่ 0:00น.
+     */
+    Subject.prototype.getEndTime = function () {
+        return this.startTime + this.width;
+    };
+    Subject.prototype.getLocaleEndTime = function () {
+        return getLocalTimeStringFromMinute(this.getEndTime());
+    };
+    Subject.prototype.getLocaleTime = function () {
+        return this.getLocaleStartTime() + "-" + this.getLocaleEndTime();
+    };
+    /**
+     * ส่งกลับข้อความที่เป็นภาษามนุษย์
+     * @returns {String} ข้อความที่มนุษย์อ่านได้
+     */
+    Subject.prototype.getLocaleString = function () {
+        return " \u0E04\u0E32\u0E1A\u0E17\u0E35\u0E48 " + (this.getLocalePeriod() + 1) + " \u0E02\u0E2D\u0E07\u0E27\u0E31\u0E19.\n \u0E40\u0E23\u0E35\u0E22\u0E19\u0E27\u0E34\u0E0A\u0E32 : " + this.getName() + ".\n \u0E23\u0E2B\u0E31\u0E2A : " + this.getLocaleId() + "\n"
+            + (" \u0E40\u0E23\u0E35\u0E22\u0E19\u0E17\u0E35\u0E48 : " + this.getLocaleRoomId() + "\n")
+            + (" \u0E15\u0E31\u0E49\u0E07\u0E41\u0E15\u0E48\u0E40\u0E27\u0E25\u0E32 : " + this.getLocaleStartTime() + " \u0E19. \u0E16\u0E36\u0E07 " + this.getLocaleEndTime() + " \u0E19.\n \u0E40\u0E1B\u0E47\u0E19\u0E40\u0E27\u0E25\u0E32 : " + this.getWidth() + " \u0E19\u0E32\u0E17\u0E35.\n")
+            + (" \u0E04\u0E23\u0E39\u0E1C\u0E39\u0E49\u0E2A\u0E2D\u0E19\u0E04\u0E37\u0E2D : " + this.getLocaleTeacherName() + ".");
+    };
+    return Subject;
+}());
+var ClassData = /** @class */ (function () {
+    function ClassData() {
     }
-
+    ClassData.get = function (day) {
+        if (typeof (day) === 'number') {
+            return SubjectDay.get(day);
+        }
+        return SubjectDay.get();
+    };
     /**
      * สามารถโหลดหรือดูตัวอย่างข้อมูลดิบที่จะนำมาใส่ใน parameter ของฟังก์ชันนี้ได้ที่.
      *  - https://raw.githubusercontent.com/karnhao/HaoWidget/main/subject_data/6-10/6-10.json
      * @param {any} json ข้อมูลดิบ.
      */
-    static setData(json) {
+    ClassData.setData = function (json) {
         this.setStartTime(json.startTime);
         this.setClassId(json.classId);
         this.setClassName(json.className);
         this.setNullSubject((function (data) {
-            let s = new Subject();
-            let raw_s = data.nullSubject;
+            var s = new Subject();
+            var raw_s = data.nullSubject;
             s.setId(raw_s.id);
             s.setName(raw_s.name);
             s.setPeriod(raw_s.period);
@@ -121,19 +306,19 @@ class ClassData {
             s.setWidth(raw_s.width);
             return s;
         })(json));
-
         // set Data from subjectList.
         // loop day 0 to 6.
-        for (let i = 0; i < 7; i++) {
-            let f = new Function('data', `return data.subjectList._${i};`);
-            let sl = f(json);
+        for (var i = 0; i < 7; i++) {
+            var f = new Function('data', "return data.subjectList._" + i + ";");
+            var sl = f(json);
             if (Array.isArray(sl)) {
-                let s = [];
-                let k = 0;
+                var s = [];
+                var k = 0;
                 // loop subject in subjectList.
-                for (let j of sl) {
-                    let raw_object = j;
-                    let si = new Subject();
+                for (var _i = 0, sl_1 = sl; _i < sl_1.length; _i++) {
+                    var j = sl_1[_i];
+                    var raw_object = j;
+                    var si = new Subject();
                     si.setName(raw_object.name);
                     si.setId(raw_object.id);
                     si.setPeriod(k);
@@ -147,169 +332,174 @@ class ClassData {
             }
         }
         // SubjectDay.update();
-    }
+    };
     /**
-     * 
+     *
      * @param {Number} number เวลาเริ่มต้นคาบแรก นับตั้งแต่จุดเริ่มต้นของวัน (0:00น) หน่วยเป็นนาที.
      */
-    static setStartTime(number) {
+    ClassData.setStartTime = function (number) {
         this.data.startTime = number;
-    }
+    };
     /**
-     * 
+     *
      * @param {any} id id ห้องเรียน.
      */
-    static setClassId(id) {
+    ClassData.setClassId = function (id) {
         this.data.classId = id;
-    }
+    };
     /**
-     * 
+     *
      * @param {String} name ชื่อห้องเรียน.
      */
-    static setClassName(name) {
+    ClassData.setClassName = function (name) {
         this.data.className = name;
-    }
+    };
     /**
-     * 
-     * @param {Subject} subject วิชาว่าง 
+     *
+     * @param {Subject} subject วิชาว่าง
      */
-    static setNullSubject(subject) {
+    ClassData.setNullSubject = function (subject) {
         if (subject instanceof Subject) {
             this.data.nullSubject = subject;
             return;
         }
         throw new TypeError("Parameter ต้องเป็น object ใน Subject.");
-    }
+    };
     /**
-     * 
+     *
      * @param {Date} date วัน.
      * @returns {Subject} วิชา.
      */
-    static getSubjectByDate(date) {
+    ClassData.getSubjectByDate = function (date) {
         if (date instanceof Date) {
-            return this.get(date.getDay(date.getDay())).getSubjectByTime((date.getHours() * 60) + date.getMinutes());
+            return this.get(date.getDay()).getSubjectByTime((date.getHours() * 60) + date.getMinutes());
         }
         throw new TypeError("Parameter ต้องเป็น object ในแม่พิมพ์ Date.");
-    }
-
-    static getStartTime() {
+    };
+    ClassData.getStartTime = function () {
         return this.data.startTime;
-    }
-
-    static getClassName() {
+    };
+    ClassData.getClassName = function () {
         return this.data.className;
-    }
-
-    static getClassId() {
+    };
+    ClassData.getClassId = function () {
         return this.data.classId;
-    }
+    };
     /**
-     * 
+     *
      * @returns {Subject} วิชาว่าง.
      */
-    static getNullSubject() {
+    ClassData.getNullSubject = function () {
         return this.data.nullSubject;
-    }
-}
-
-class SubjectDay {
-
-    subject = [];
-
-    static sd = (function () {
-        let out = [];
-        for (let i = 0; i < 7; i++) {
-            out.push(new SubjectDay(i));
-        }
-        return out;
-    })();
-
-    static get(d) {
-        if (d != null) {
-            return this.sd[Math.floor(d)];
-        }
-        return this.sd;
-    }
-
-    static update() {
-        this.sd.forEach((t) => {
-            t.update();
-        });
-    }
-
-    constructor(day) {
+    };
+    ClassData.data = {
+        startTime: 0,
+        classId: '',
+        className: '',
+        nullSubject: new Subject()
+    };
+    return ClassData;
+}());
+var SubjectDay = /** @class */ (function () {
+    function SubjectDay(day) {
+        this.subject = [];
         if (Number.isInteger(day)) {
             this.day = day;
             return;
         }
         throw new TypeError("Parameter ต้องเป็นจำนวนเต็ม");
     }
-    update() {
-        let t = ClassData.getStartTime();
-        this.subject.forEach((k) => {
+    SubjectDay.get = function (day) {
+        if (day != null) {
+            return this.sd[Math.floor(day)];
+        }
+        return this.sd;
+    };
+    /**
+     * อัพเดตเวลาแต่ละคาบของทุกวัน.
+     */
+    SubjectDay.update = function () {
+        this.sd.forEach(function (t) {
+            t.update();
+        });
+    };
+    /**
+     * อัพเดตเวลาแต่ละคาบของวันนี้.
+     * method นี้จะถูกเรียกใช้ตอนมีการเรียกใช้ setSubject
+     */
+    SubjectDay.prototype.update = function () {
+        var t = ClassData.getStartTime();
+        this.subject.forEach(function (k) {
             k.setStartTime(t);
             t += k.getWidth();
         });
-    }
+    };
     /**
-     * 
-     * @param  {Subject[]} subject 
+     *
+     * @param  {Subject[]} subject
      */
-    setSubject(subject) {
+    SubjectDay.prototype.setSubject = function (subject) {
         this.subject = subject;
         this.update();
-    }
+    };
     /**
-     * 
+     *
      * @param {Number} p คาบเรียน index.
      * @returns {Subject} วิชา.
      */
-    getSubject(p) {
+    SubjectDay.prototype.getSubject = function (p) {
         // if period < 0
         if (p == -1) {
-            let s = ClassData.getNullSubject();
-            s.setStartTime(0);
-            s.width = (this.subject.length > 0) ? ClassData.getStartTime() : Infinity;
-            s.setPeriod(-1);
+            var s = ClassData.getNullSubject();
+            if (s) {
+                s.setStartTime(0);
+                s.setWidth(this.subject.length > 0 ? ClassData.getStartTime() : Infinity);
+                s.setPeriod(-1);
+            }
             return s;
         }
-        let out = this.subject[Math.floor(p)];
+        var out = this.subject[Math.floor(p)];
         if (out != null) {
             // Normal value
             return out;
-        } else if (p == this.subject.length && p != 0) {
+        }
+        else if (p == this.subject.length && p != 0) {
             // End subject.
-            let s = ClassData.getNullSubject();
-            let last_subject = this.subject[this.subject.length - 1];
-            s.setStartTime((last_subject) ? last_subject.getEndTime() : 0);
-            s.setPeriod((last_subject) ? last_subject.getPeriod() + 1 : -1);
-            s.width = Infinity;
+            var s = ClassData.getNullSubject();
+            var last_subject = this.subject[this.subject.length - 1];
+            if (s) {
+                var last_subject_period = last_subject.getPeriod();
+                s.setStartTime((last_subject) ? last_subject.getEndTime() : 0);
+                s.setPeriod((last_subject && last_subject_period) ? last_subject_period + 1 : -1);
+                s.setWidth(Infinity);
+            }
             return s;
-        } else {
+        }
+        else {
             return null;
         }
-    }
+    };
     /**
-     * 
+     *
      * @returns {Subject[]} วิชา
      */
-    getSubjectList() {
+    SubjectDay.prototype.getSubjectList = function () {
         return this.subject;
-    }
+    };
     /**
-     * 
+     *
      * @param {Number} timeminute เวลาตั้งแต่จุดเริ่มต้นของวัน (0:00น) หน่วยเป็นนาที.
      * @returns {Subject} วิชา.
      */
-    getSubjectByTime(timeminute) {
+    SubjectDay.prototype.getSubjectByTime = function (timeminute) {
         return this.getSubject(this.getPeriodByTime(timeminute));
-    }
+    };
     /**
-     * 
+     *
      * @param {Number} timeminute เวลาตั้งแต่จุดเริ่มต้นของวัน (0:00น) หน่วยเป็นนาที.
      * @returns {Number} คาบ.
      */
-    getPeriodByTime(timeminute) {
+    SubjectDay.prototype.getPeriodByTime = function (timeminute) {
         // example output : 
         // in < 500 => -1
         // in 500-549 => 0
@@ -317,213 +507,47 @@ class SubjectDay {
         if (timeminute < ClassData.getStartTime() || this.subject.length == 0) {
             return -1;
         }
-        let p = 0;
-        for (let i of this.getSubjectList()) {
+        var p = 0;
+        for (var _i = 0, _a = this.getSubjectList(); _i < _a.length; _i++) {
+            var i = _a[_i];
             if (i.getStartTime() <= timeminute && timeminute < i.getEndTime()) {
                 return p;
             }
             p++;
         }
         return p;
-    }
+    };
     /**
-     * 
+     *
      * @returns {String} ข้อมูลวิชาในวันนี้ที่มนุษย์สามารถอ่านได้ง่าย.
      */
-    getLocaleSubjectList() {
+    SubjectDay.prototype.getLocaleSubjectList = function () {
         if (!this.getSubjectList().length) {
             return "ไม่มีข้อมูล";
         }
-        let out = "";
-        this.getSubjectList().forEach((t) => {
-            out += t.getLocaleString();
+        var out = "";
+        this.getSubjectList().forEach(function (t) {
+            out += t.getLocaleString() + "\n\n";
         });
         return out;
-    }
-}
-class Subject {
-    width = 0;
-    startTime = 0;
-    constructor(name) {
-        this.name = name;
-    }
-    /**
-     * 
-     * @param {any} id รหัสวิชา.
-     */
-    setId(id) {
-        this.id = id;
-    }
-    /**
-     * 
-     * @param {String} name ชื่อวิชา.
-     */
-    setName(name) {
-        if (typeof name == "string") {
-            this.name = name;
-            return;
-        }
-        throw new TypeError("Parameter ต้องเป็น string.");
-    }
-    /**
-     * 
-     * @param  {String[]} teacher รายชื่อครูประจำวิชา (array).
-     */
-    setTeacher(teacher) {
-        this.teacher = teacher;
-    }
-    /**
-     * 
-     * @param {String} roomId ชื่อห้องเรียนหรือรหัสห้องเรียน.
-     */
-    setRoomId(roomId) {
-        this.roomId = roomId;
-    }
-    /**
-     * 
-     * @param {Number} number ระยะเวลาเรียน หน่วยเป็นนาที.
-     */
-    setWidth(number) {
-        if (typeof number == "number" || number == null) {
-            this.width = number;
-        } else {
-            throw new TypeError(`Parameter ต้องเป็นตัวเลขเท่านั้น. : ${number}`)
-        }
-    }
-    /**
-     * 
-     * @param {Number} number หมายเลขคาบในวิชา.
-     */
-    setPeriod(number) {
-        if (typeof number == "number" || number == null) {
-            if (Number.isInteger(number) || number == null) {
-                this.period = number;
-            } else {
-                throw new TypeError(`Parameter ต้องเป็นตัวเลขที่เป็นจำนวนเต็มเท่านั้น. : ${number}`);
-            }
-        } else {
-            throw new TypeError(`Parameter ต้องเป็นตัวเลขเท่านั้น. : ${number}`)
-        }
-    }
-    /**
-     * @param {Number} time เวลาในหน่วยนาที นับตั้งแต่ 0:00น.
-     */
-    setStartTime(time) {
-        this.startTime = time;
-    }
-    /**
-     * 
-     * @returns รหัสวิชา
-     */
-    getId() {
-        return this.id;
-    }
-    getLocaleId() {
-        return this.getId() ? this.getId().replaceAll("", " ").trim() : "ไม่ทราบ";
-    }
-    /**
-     * 
-     * @returns ชื่อวิชา
-     */
-    getName() {
-        return this.name;
-    }
-    /**
-     * 
-     * @returns รายชื่อครูประจำวิชา (array).
-     */
-    getTeacher() {
-        return this.teacher;
-    }
-    /**
-     * 
-     * @returns รายชื่อครูประจำวิชาในภาษามนุษย์ทั่วไป
-     */
-    getLocaleTeacherName() {
-        if (!this.getTeacher()) {
-            return "ไม่ทราบ";
-        }
-        let t_arr = this.teacher;
-        let out = "";
-        for (let i = 0; i < t_arr.length; i++) {
-            out += (i == t_arr.length - 1) ? `${t_arr[i]}` : `${t_arr[i]} และ `;
+    };
+    SubjectDay.prototype.getDay = function () {
+        return this.day;
+    };
+    SubjectDay.sd = (function () {
+        var out = [];
+        for (var i = 0; i < 7; i++) {
+            out.push(new SubjectDay(i));
         }
         return out;
-    }
-    /**
-     * 
-     * @returns ชื่อห้องเรียนหรือรหัสห้องเรียน.
-     */
-    getRoomId() {
-        return this.roomId;
-    }
-    /**
-     * 
-     * @returns {String}
-     */
-    getLocaleRoomId() {
-        if (!this.getRoomId()) {
-            return "ไม่ทราบ";
-        }
-        let ins = this.getRoomId();
-        let out = ins[0];
-        for (let i = 1; i < ins.length; i++) {
-            out += (isNaN(ins[i]) || ins[i].match("\\s+") || ins[i - 1].match("\\s+") ? ins[i] : ` ${ins[i]}`)
-        }
-        return out;
-    }
-    /**
-     * 
-     * @returns ระยะเวลาเรียน หน่วยเป็นนาที.
-     */
-    getWidth() {
-        return this.width;
-    }
-    /**
-     * 
-     * @returns หมายเลขคาบในวิชา.
-     */
-    getPeriod() {
-        return this.period;
-    }
-    /**
-     * 
-     * @returns เวลาเมื่อเริ่มต้นคาบเรียนในรูปแบบนาทีที่นับตั้งแต่ 0:00น.
-     */
-    getStartTime() {
-        return this.startTime;
-    }
-    getLocaleStartTime() {
-        return getLocalTimeStringFromMinute(this.getStartTime());
-    }
-    /**
-     * 
-     * @returns เวลาเมื่อจบคาบเรียนในรูปแบบนาทีที่นับตั้งแต่ 0:00น.
-     */
-    getEndTime() {
-        return this.startTime + this.width;
-    }
-    getLocaleEndTime() {
-        return getLocalTimeStringFromMinute(this.getEndTime());
-    }
-    getLocaleTime() {
-        return `${this.getLocaleStartTime()}-${this.getLocaleEndTime()}`;
-    }
-    /**
-     * ส่งกลับข้อความที่เป็นภาษามนุษย์
-     * @returns {String} ข้อความที่มนุษย์อ่านได้
-     */
-    getLocaleString() {
-        return ` คาบที่ ${this.getPeriod() + 1} ของวัน. วิชา ${this.getName()}. รหัส ${this.getLocaleId()}.`
-            + ` เรียนที่ ${this.getLocaleRoomId()}.`
-            + ` ตั้งแต่เวลา ${this.getLocaleStartTime()} น. ถึง ${this.getLocaleEndTime()} น. เป็นเวลา ${this.getWidth()} นาที.`
-            + ` ครูผู้สอนคือ ${this.getLocaleTeacherName()}.`;
-    }
-}
+    })();
+    return SubjectDay;
+}());
+
+
 
 // SET DATA
 if (raw_json) {
-    ;
     ClassData.setData(raw_json);
 }
 
@@ -563,7 +587,7 @@ if (config.runsInWidget) {
     let input = args.shortcutParameter.split(" ");
     let p = currentPariod;
     let d = currentDay;
-    if (input[0].toLowerCase().trim() == "getSubject".toLowerCase().trim()) {
+    if (input[0].toLowerCase().trim() == "getSubject".toLowerCase().trim() || input[0].toLowerCase().trim() == "getSubjectName".toLowerCase().trim()) {
         switch (input.length) {
             case 2:
                 try {
@@ -578,9 +602,37 @@ if (config.runsInWidget) {
                 break;
             default: ;
         }
-        Script.setShortcutOutput(JSON.stringify(ClassData.get(d).getSubject(p)));
+        if (input[0].toLowerCase().trim() == "getSubject".toLowerCase().trim()) {
+            Script.setShortcutOutput(ClassData.get(d).getSubject(p).getLocaleString());
+        }
+        else if (input[0].toLowerCase().trim() == "getSubjectName".toLowerCase().trim()) {
+            Script.setShortcutOutput(ClassData.get(d).getSubject(p).getName());
+        }
         Script.complete();
-    } else {
+    } else if (input[0].toLowerCase().trim() == "getSubjectList".toLowerCase().trim()) {
+        if (input.length == 2) {
+            try {
+                d = parseInt(input[1]);
+            } catch (e) { };
+        }
+        Script.setShortcutOutput(ClassData.get(d).getLocaleSubjectList());
+        Script.complete();
+    } else if (input[0].toLowerCase().trim() == "getNextSubject".toLowerCase().trim()) {
+        if (input.length == 2) {
+            try {
+                p += parseInt(input[1]);
+            } catch (e) { };
+        } else {
+            p++;
+        }
+        try {
+            Script.setShortcutOutput(currentSubjectDay.getSubject(p).getLocaleString());
+        } catch (e) {
+            Script.setShortcutOutput("มีบางอย่างผิดพลาด. อาจจะไม่มีวิชานี้");
+        }
+        Script.complete();
+    }
+    else {
         Script.setShortcutOutput("Error : มีบางอย่างผิดพลาด");
         Script.complete();
     }
@@ -770,7 +822,7 @@ async function createWidget() {
                     let t0;
                     // t0 = body1.addText(": " + getSubject(currentDay, ch, null));
                     if (currentSubjectDay.getSubject(ch)) {
-                        t0 = body1.addText(": " + currentSubjectDay.getSubject(ch));
+                        t0 = body1.addText(": " + currentSubjectDay.getSubject(ch).getName());
                     } else {
                         t0 = body1.addText(": ");
                     }
@@ -1075,13 +1127,15 @@ async function createWidget() {
             ct.lineLimit = 1;
 
             let t1T0 = title10.addText("กำลังเรียนวิชา 📖");
-            t1T0.font = new Font("default", 16);
+            t1T0.font = new Font("default", 15);
             t1T0.textColor = new Color("#FFFFAA", 1)
 
             s = title10.addText(currentSubject.getName());
-            s.font = new Font("default", 22);
-            s.textColor = new Color("#3333FF", 1);
+
+            s.font = Font.boldSystemFont(18);
+            s.textColor = Color.dynamic(new Color("#3333FF", 1), new Color("#BBBBFF", 1));
             s.lineLimit = 1;
+
 
             t1l0.size = new Size(title10.size.width, 0.5);
             t1l0.backgroundColor = lc;
@@ -1178,19 +1232,18 @@ async function rw(notify) {
 
 /**
  * ส่งกลับวันจากนาที
- * @param {number} minute 
+ * @param {number} minute
  * @returns {Date} วัน
  * @author Sittipat Tepsutar
  */
 function getDateFromMinute(minute) {
-    let returndate = new Date();
+    var returndate = new Date();
     returndate.setHours(Math.floor(minute / 60));
     returndate.setMinutes(minute % 60);
     returndate.setSeconds(0);
     returndate.setMilliseconds(0);
     return returndate;
 }
-
 /**
  * คำนวนเวลา(ในรูปแบบข้อความ string)จากนาที
  * @param {number} minute
@@ -1202,9 +1255,9 @@ function getLocalTimeStringFromMinute(minute) {
     if (minute == Infinity) {
         return "00:00";
     }
-    let pad = (d) => (d < 10) ? '0' + d.toString() : d.toString();
-    let t1 = getDateFromMinute(minute);
-    return `${pad(t1.getHours())}:${pad(t1.getMinutes())}`;
+    var pad = function (d) { return (d < 10) ? '0' + d.toString() : d.toString(); };
+    var t1 = getDateFromMinute(minute);
+    return pad(t1.getHours()) + ":" + pad(t1.getMinutes());
 }
 
 /**
