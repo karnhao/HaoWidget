@@ -153,6 +153,7 @@ var Subject = /** @class */ (function () {
     Subject.prototype.getLocalePeriod = function () {
         var out = this.getPeriod();
         if (typeof (out) === 'number') {
+            out++;
             return out.toString();
         }
         return "NULL";

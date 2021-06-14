@@ -149,6 +149,7 @@ class Subject {
     public getLocalePeriod(): string {
         let out = this.getPeriod();
         if (typeof (out) === 'number') {
+            out++;
             return out.toString();
         }
         return "NULL";
