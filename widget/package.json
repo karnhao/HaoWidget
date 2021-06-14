@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/scriptable-ios": "^1.6.1"
+  }
+}
