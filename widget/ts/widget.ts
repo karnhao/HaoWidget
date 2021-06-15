@@ -12,9 +12,6 @@
   
   กฎและเงื่อนไขในการใช้งาน
     - สามารถใช้งานได้ฟรี
-    - ห้ามคัดลอกหรือดัดแปลงโค๊ดเป็นของตนเอง
-    - ห้ามใช้วิทเจ็ทนี้ในการหารายได้หรือผลประโยชน์ของตัวเองหรือกลุ่มบางกลุ่ม
-  
   
   วิธีใช้งาน
     การเรียกใช้งาน
@@ -1297,23 +1294,6 @@ async function notific(title: string, text: string): Promise<void> {
     return n.schedule();
 }
 
-// January 14, 2012Mike Bostock
-function shuffle(array: string[]) {
-    var m = array.length, t, i;
-
-    // While there remain elements to shuffle…
-    while (m) {
-
-        // Pick a remaining element…
-        i = Math.floor(Math.random() * m--);
-
-        // And swap it with the current element.
-        t = array[m];
-        array[m] = array[i];
-        array[i] = t;
-    }
-}
-
 function getWelcome(timeminute: number) {
     if (timeminute >= 1140) return "สวัสดีตอนกลางคืน";
     if (timeminute >= 960) return "สวัสดีตอนเย็น";
@@ -1350,7 +1330,7 @@ async function getRandomBackgroundImage(forceUrl?: string): Promise<Image | null
         }
 
         //Shuffle urlList
-        shuffle(urlList);
+        urlList.sort(() => Math.random() - 0.5);
     }
 
     //store Image
