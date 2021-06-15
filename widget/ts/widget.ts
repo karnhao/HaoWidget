@@ -38,46 +38,45 @@
 // code >>
 
 var widgetFamily: string = config.widgetFamily;
-
 Notification.removeAllPending();
 
-// load file.
-let fm = FileManager.local();
-let path: string | null = null;
-let raw_json: any = null;
-if (fm.bookmarkExists("HaoWidget")) {
-    path = fm.bookmarkedPath("HaoWidget") + "/subject_data.json";
-} else {
-    let message = "กรุณาเพิ่ม Bookmark ในแอพ Scriptable ที่ชื่อ HaoWidget\n(เพื่อเป็นการบันทึกข้อมูลวิชาที่จะใช้ในกรณีที่ไม่มีการเชื่อมต่อกับอินเทอร์เน็ต.)";
-    console.warn(message);
-    let n = new Notification();
-    n.title = "คำเตือน";
-    n.body = message;
-    n.addAction("Open app", "scriptable:///", false);
-    n.addAction("Open Script", `scriptable:///open/${Script.name()}`, false)
-    await n.schedule();
-}
+// load/save file.
+async function loadData(): Promise<any> {
+    let fm = FileManager.local();
+    let path: string | null = null;
+    let raw_json: any = null;
+    if (fm.bookmarkExists("HaoWidget")) {
+        path = fm.bookmarkedPath("HaoWidget") + "/subject_data.json";
+    } else {
+        let message = "กรุณาเพิ่ม Bookmark ในแอพ Scriptable ที่ชื่อ HaoWidget\n(เพื่อเป็นการบันทึกข้อมูลวิชาที่จะใช้ในกรณีที่ไม่มีการเชื่อมต่อกับอินเทอร์เน็ต.)";
+        console.warn(message);
+        let n = new Notification();
+        n.title = "คำเตือน";
+        n.body = message;
+        n.addAction("Open app", "scriptable:///", false);
+        n.addAction("Open Script", `scriptable:///open/${Script.name()}`, false);
+        await n.schedule();
+    }
 
-if (config.runsInWidget || args.shortcutParameter) {
-    let request = new Request("https://raw.githubusercontent.com/karnhao/HaoWidget/main/subject_data/6-10/6-10.json");
-    try {
-        raw_json = await request.loadJSON();
-        if (path) {
-            fm.writeString(path, JSON.stringify(raw_json));
-        }
-    } catch (e) {
-        console.log(e.message);
+    if (config.runsInWidget || args.shortcutParameter) {
+        let request = new Request("https://raw.githubusercontent.com/karnhao/HaoWidget/main/subject_data/6-10/6-10.json");
         try {
+            raw_json = await request.loadJSON();
+            if (path) {
+                fm.writeString(path, JSON.stringify(raw_json));
+            }
+
+        } catch (e) {
             if (path && fm.fileExists(path)) {
                 raw_json = JSON.parse(fm.readString(path));
             } else {
-                throw new Error();
+                throw new Error("การโหลดไฟล์ล้มเหลวและไม่พบไฟล์ข้อมูลเก่า. คำแนะนำ : ทำให้แน่ใจว่าอุปกรณ์เชื่อมต่อกับอินเทอร์เน็ตอยู่ และ refresh widget ใหม่.");
             }
-        } catch (e) {
-            throw new Error("การโหลดไฟล์ล้มเหลวและไม่พบไฟล์ข้อมูลเก่า. คำแนะนำ : ทำให้แน่ใจว่าอุปกรณ์เชื่อมต่อกับอินเทอร์เน็ตอยู่ และ refresh widget ใหม่.");
         }
-
     }
+    return new Promise((resolve, reject) => {
+        resolve(raw_json);
+    })
 }
 
 class Subject {
@@ -595,9 +594,9 @@ class SubjectDay {
 
 
 // SET DATA.
-if (raw_json) {
-    ClassData.setData(raw_json);
-}
+// if (raw_json) {
+//     ClassData.setData(raw_json);
+// }
 
 // global current date day.
 const currentDate = new Date();
@@ -608,13 +607,6 @@ var currentMinutes: number;
 var currentSubjectDay: SubjectDay = new SubjectDay(0);
 var currentPariod: number = -1;
 var currentSubject: Subject | null;
-
-if (config.runsInWidget || args.shortcutParameter) {
-    currentMinutes = getTimeMinute(currentDate);
-    currentSubjectDay = ClassData.get(currentDay);
-    currentPariod = currentSubjectDay.getPeriodByTime(currentMinutes);
-    currentSubject = currentSubjectDay.getSubject(currentPariod);
-}
 
 // widget parameter >> ----------------------------------------------------->>>.
 if (args.widgetParameter != null) {
@@ -628,14 +620,40 @@ if (args.widgetParameter != null) {
 }
 // end widget parameter //-------------------------------------------------->>>.
 
+// [--function declare--]
+
 // Main
-if (config.runsInWidget) {
+async function main(): Promise<Boolean> {
+
+    // SET DATA
+    ClassData.setData(await loadData());
+
+    // SET GLOBAL
+    currentMinutes = getTimeMinute(currentDate);
+    currentSubjectDay = ClassData.get(currentDay);
+    currentPariod = currentSubjectDay.getPeriodByTime(currentMinutes);
+    currentSubject = currentSubjectDay.getSubject(currentPariod);
+
+    return new Promise((resolve, reject) => {
+        resolve(config.runsInWidget);
+    });
+}
+
+async function main_widget(): Promise<ListWidget> {
+    let widget: ListWidget;
     if (!(args.shortcutParameter)) {
-        let wid = await rw(false);
-        Script.setWidget(wid);
-        Script.complete();
+        try {
+            widget = await rw(false);
+        } catch (e) {
+            throw new Error(e);
+        }
     }
-} else if (args.shortcutParameter) {
+    return new Promise((resolve, reject) => {
+        resolve(widget);
+    });
+}
+
+function main_shortcut(): void {
     let input = args.shortcutParameter.split(" ");
     let p = currentPariod;
     let d = currentDay;
@@ -656,13 +674,13 @@ if (config.runsInWidget) {
         }
         if (input[0].toLowerCase().trim() == "getSubject".toLowerCase().trim()) {
             let s = ClassData.get(d).getSubject(p);
-            Script.setShortcutOutput(s ? s.getLocaleSpeakString() : "มีบางอย่างผิดพลาด! เอ๋ ได้ยังไง?! มันเป็นไปไม่ได้นี่น่า");
+            Script.setShortcutOutput(s ? s.getLocaleSpeakString() : "ไม่มีวิชานี้ในฐานข้อมูล.");
         }
         else if (input[0].toLowerCase().trim() == "getSubjectName".toLowerCase().trim()) {
             let s = ClassData.get(d).getSubject(p);
-            Script.setShortcutOutput(s ? s.getName() : "มีบางอย่างผิดพลาด! เอ๋ ได้ยังไง?! มันเป็นไปไม่ได้นี่น่า");
+            Script.setShortcutOutput(s ? s.getName() : "ไม่มีวิชานี้ในฐานข้อมูล.");
         }
-        Script.complete();
+        return;
     } else if (input[0].toLowerCase().trim() == "getSubjectList".toLowerCase().trim()) {
         if (input.length == 2) {
             try {
@@ -670,7 +688,7 @@ if (config.runsInWidget) {
             } catch (e) { }
         }
         Script.setShortcutOutput(ClassData.get(d).getLocaleSubjectList());
-        Script.complete();
+        return;
     } else if (input[0].toLowerCase().trim() == "getNextSubject".toLowerCase().trim()) {
         if (input.length == 2) {
             try {
@@ -681,15 +699,13 @@ if (config.runsInWidget) {
         }
         let s = currentSubjectDay.getSubject(p);
         Script.setShortcutOutput(s ? s.getLocaleSpeakString() : "ไม่มีวิชานี้ในฐานข้อมูล.");
-        Script.complete();
+        return;
     }
     else {
         Script.setShortcutOutput("Error : มีบางอย่างผิดพลาด");
-        Script.complete();
+        return;
     }
 }
-
-// [--function declare--]
 
 /**
  * สร้าง widget และค่าในแต่ละ layout
@@ -1080,11 +1096,6 @@ async function createWidget(): Promise<ListWidget> {
                 bi.size = new Size(b1.size.width, b1.size.height / 4);
                 let t: WidgetText;
                 let s = currentSubjectDay.getSubject(ch - 1);
-                // if (currentSubjectDay.getSubject(ch - 1)) {
-                //     t = bi.addText(currentSubjectDay.getSubject(ch - 1).getName());
-                // } else {
-                //     t = bi.addText("");
-                // }
                 t = bi.addText(s ? s.getName() : "");
 
                 if (currentPariod + 1 == ch) {
@@ -1109,11 +1120,6 @@ async function createWidget(): Promise<ListWidget> {
                 bi.size = new Size(b2.size.width, b2.size.height / 4);
                 let t: WidgetText;
                 let s = currentSubjectDay.getSubject(ch - 1);
-                // if (currentSubjectDay.getSubject(ch - 1)) {
-                //     t = bi.addText(currentSubjectDay.getSubject(ch - 1).getLocaleTime());
-                // } else {
-                //     t = bi.addText("");
-                // }
                 t = bi.addText(s ? s.getLocaleTime() : "");
 
                 bi.addSpacer();
@@ -1280,7 +1286,7 @@ function getTimeMinute(date: Date) {
     return date.getHours() * 60 + date.getMinutes();
 }
 
-function getRndInteger(min: number, max: number) {
+function getRndInteger(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -1421,4 +1427,18 @@ function getSplashText(): string {
 }
 
 // end function declare
-export { };
+
+if (config.runsInWidget || args.shortcutParameter) {
+    if (await main()) {
+        let t = await main_widget();
+        Script.setWidget(t);
+    } else if (args.shortcutParameter) {
+        main_shortcut();
+    }
+    Script.complete();
+}
+
+// END
+
+// Make this file a module
+export { ClassData }

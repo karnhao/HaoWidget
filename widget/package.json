@@ -1,5 +1,15 @@
 {
   "devDependencies": {
     "@types/scriptable-ios": "^1.6.1"
-  }
+  },
+  "name": "haowidget",
+  "version": "1.0.0",
+  "description": "Widget",
+  "main": "haowidget.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sittipat Tepsutar",
+  "license": "ISC",
+  "type": "module"
 }
