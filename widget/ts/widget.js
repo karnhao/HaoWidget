@@ -2,34 +2,52 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: deep-gray; icon-glyph: magic;
 /*
-  วิทเจ็ท (วิจิท) แสดงตารางสอน
+  วิทเจ็ท (วิจิท) แสดงตารางสอน.
   
-  วิทเจ็ทนี้สามารถระบุคาบเรียน วิชาที่เรียน ณ ปัจจุบัน วิชาต่อไปของคาบเรียน และอื่นๆ ช่วยให้ผู้ใช้ไม่ต้องเปิดดูตารางสอนหรือตั้งเป็นพื้นหลังของหน้าจอ
-  เมื่อใช้งานแล้ว ถ้าว่างๆก็เข้ามาทำแบบสอบถามความพึงพอใจได้ที่
+  วิทเจ็ทนี้สามารถระบุคาบเรียน วิชาที่เรียน ณ ปัจจุบัน วิชาต่อไปของคาบเรียน และอื่นๆ ช่วยให้ผู้ใช้ไม่ต้องเปิดดูตารางสอนหรือตั้งเป็นพื้นหลังของหน้าจอ.
+  เมื่อใช้งานแล้ว ถ้าว่างๆก็เข้ามาทำแบบสอบถามความพึงพอใจได้ที่.
     - https://forms.gle/As3pfDxbfUTYnfxP8
   
   ผู้เขียน : สิทธิภัทท์ เทพสุธา
   
-  กฎและเงื่อนไขในการใช้งาน
-    - สามารถใช้งานได้ฟรี
+  กฎและเงื่อนไขในการใช้งาน.
+    - สามารถใช้งานได้ฟรี.
   
-  วิธีใช้งาน
-    การเรียกใช้งาน
-    - แสดงผลผ่านทางวิทเจ็ท โดยมีวิธีดังนี้
-      1. เพิ่มวิทเจ็ดใหม่
-      2. เรียกใช้วิทเจ็ทผ่านทางแอพ scriptable
-      3. เลือก script นี้
-    - ระบบนี้สามารถแสดงผลที่แตกต่างกันในแต่ละขนาดของวิทเจ็ท (ขนาดเล็กและใหญ่)
+  วิธีใช้งาน.
+    การเรียกใช้งาน.
+    - แสดงผลผ่านทางวิทเจ็ท โดยมีวิธีดังนี้.
+      1. เพิ่มวิทเจ็ดใหม่.
+      2. เรียกใช้วิทเจ็ทผ่านทางแอพ scriptable.
+      3. เลือก script นี้.
+    - ระบบนี้สามารถแสดงผลที่แตกต่างกันในแต่ละขนาดของวิทเจ็ท (ขนาดเล็กและใหญ่).
     
-    การตั้งค่าวิทเจ็ท
-    - สามารถกำหนดวันเองได้โดยวิธีดังนี้
-      1. กดหรือแตะค้างที่หน้าวิทเจ็ท
-      2. กดไปที่แก้ไข "scriptable"
-      3. ไปที่ parameter
+    การตั้งค่าวิทเจ็ท.
+    - สามารถกำหนดวันเองได้โดยวิธีดังนี้.
+      1. กดหรือแตะค้างที่หน้าวิทเจ็ท.
+      2. กดไปที่แก้ไข "scriptable".
+      3. ไปที่ parameter.
       4. ใส่คำว่า setDay <number>
-        <number> ให้ใส่ตัวเลขจำนวนเต็มระหว่าง 0 ถึง 6 โดยเลข 0 คือวันอาทิตย์ 1 คือวันจันทร์ 2 คือวันอังคาร ... 6 คือวันเสาร์
-      5. ออกและเสร็จสิ้น
+        <number> ให้ใส่ตัวเลขจำนวนเต็มระหว่าง 0 ถึง 6 โดยเลข 0 คือวันอาทิตย์ 1 คือวันจันทร์ 2 คือวันอังคาร ... 6 คือวันเสาร์.
+      5. ออกและเสร็จสิ้น.
+
+    การเรียกใช้ผ่านทางแอพ Shortcut ของ iOS
+    - ShortcutParameter และไวยากรณ์ มีดีงนี้
+      สำคัญ :
+              - <คาบเรียน> คือตัวเลขแทนคาบเรียน.
+                โดยที่คาบเรียนที่ 1 จะเป็นเลข 0, คาบเรียนที่ 2 จะเป็นเลข 1, ..., คาบเรียนที่ n จะเป็น n-1 ในความหมายของระบบ.
+              - <วัน> คือตัวเลขจำนวนเต็มระหว่าง 0 ถึง 6 แทนวัน, 0 คือวันอาทิตย์ 1 คือวันจันทร์ 2 คือวันอังคาร ... 6 คือวันเสาร์.
+      1. getSubject <คาบเรียน> : ระบบจะส่งออกวิชาในรูปแบบข้อความสำหรับให้ ai อ่าน และเป็นภาษาที่มนุษย์อ่านฟังได้. วันจะเป็นวันปัจจุบันของเครื่อง.
+      2. getSubject <วัน> <คาบเรียน> : ระบบจะส่งออกวิชาในรูปแบบข้อความสำหรับให้ ai อ่าน และเป็นภาษาที่มนุษย์อ่านฟังได้.
+      3. getSubjectName <คาบเรียน> : ระบบจะส่งออกเฉพาะชื่อวิชา. วันจะเป็นวันปัจจุบันของเครื่อง.
+      4. getSubjectName <วัน> <คาบเรียน> : ระบบจะส่งออกเฉพาะชื่อวิชา.
+      5. getNextSubject <number> : <number> จะใส่หรือไม่ใส่ตัวเลขก็ได้ ถ้าไม่ใส่ ระบบจะถือว่าเป็นเลข 1. ระบบจะส่งออกวิชาในรูปแบบข้อความสำหรับให้ ai อ่าน และเป็นภาษาที่มนุษย์อ่านฟังได้. โดยวิชาจะอยู่ในคาบที่ : คาบปัจจุบัน + <number>.
+      6. getSubjectList <วัน> : <วัน> จะใส่หรือไม่ใส่ตัวเลขก็ได้ ถ้าไม่ใส่ ระบบจะถือว่าเป็นวันปัจจุบัน. ระบบจะส่งออกทุกรายวิชาในวันนั้นๆ เป็นภาษาที่มนุษย์อ่านฟังได้.
 */
+// การตั้งค่า
+const data_url = "https://raw.githubusercontent.com/karnhao/HaoWidget/main/subject_data/6-10/6-10.json"; // url ที่ระบบจะไปโหลดข้อมูลมา.
+const allow_replace = true; /* ถ้า true ระบบจะโหลดไฟล์ทุกๆครั้งที่มีการใช้งาน แล้วจะทับไฟล์ข้อมูลเก่า.
+                                          ถ้า false ระบบจะไม่โหลดไฟล์ใหม่ถ้ามีไฟล์เดิมอยู่แล้ว
+                                          false จะ ใช้ในกรณีมีอินเทอร์เน็ตจำกัด (คำเตือน ต้องเพิ่ม bookmark ที่ชื่อว่า HaoWidget ในแอพ Scriptable ก่อน โดยไปเพิ่มได้ที่การตั้งค่าภายในแอพ Scriptable ไม่เช่นนั้นระบบจะโหลดข้อมูลเก็บไว้ไม่ได้).*/
 // code >>
 var widgetFamily = config.widgetFamily;
 Notification.removeAllPending();
@@ -52,8 +70,11 @@ async function loadData() {
         await n.schedule();
     }
     if (config.runsInWidget || args.shortcutParameter) {
-        let request = new Request("https://raw.githubusercontent.com/karnhao/HaoWidget/main/subject_data/6-10/6-10.json");
+        let request = new Request(data_url);
         try {
+            if (!allow_replace && path && fm.fileExists(path)) {
+                throw new Error("ไฟล์ข้อมูลมีอยู่แล้ว. สิทธิ allow_replace ถูกปฏิเสธ.");
+            }
             raw_json = await request.loadJSON();
             if (path) {
                 fm.writeString(path, JSON.stringify(raw_json));
@@ -882,19 +903,36 @@ async function createWidget() {
             //title1 layout size,design
             title10.size = new Size(title1.size.width, title1.size.height * 1.9 / 3);
             title11.size = new Size(title1.size.width, title1.size.height * 1.1 / 3);
-            title11.layoutHorizontally();
+            title11.layoutVertically();
             title10.layoutVertically();
             title10.setPadding(0, 5, 0, 0);
             //title11 layout
             let title110 = title11.addStack();
             let title111 = title11.addStack();
-            //title11 layout size,design
-            title110.size = new Size(title11.size.width * 0.9 / 2, title11.size.height);
-            title111.size = new Size(title11.size.width * 1.1 / 2, title11.size.height);
-            title110.layoutVertically();
-            title111.layoutVertically();
-            title110.setPadding(0, 5, 5, 0);
-            title111.setPadding(0, 5, 5, 1);
+            //title11 layout size,design 2.0
+            title110.size = new Size(title11.size.width, title11.size.height * 1 / 2);
+            title111.size = new Size(title11.size.width, title11.size.height * 1 / 2);
+            title110.layoutHorizontally();
+            title111.layoutHorizontally();
+            //title110,title111 layout <- title11 2.0
+            let title110_name = title110.addStack();
+            let title111_name = title111.addStack();
+            let title110_value = title110.addStack();
+            let title111_value = title111.addStack();
+            title110_name.layoutVertically();
+            title111_name.layoutVertically();
+            title110_value.layoutVertically();
+            title111_value.layoutVertically();
+            //title110 name,value design
+            title110_name.size = new Size(title110.size.width * 0.6 / 2, title110.size.height);
+            title110_value.size = new Size(title110.size.width * 1.4 / 2, title110.size.height);
+            title110_name.setPadding(0, 5, 0, 0);
+            title110_value.setPadding(0, 0, 0, 1);
+            //title111 name,value design
+            title111_name.size = new Size(title110_name.size.width, title111.size.height);
+            title111_value.size = new Size(title110_value.size.width, title111.size.height);
+            title111_name.setPadding(0, 5, 0, 0);
+            title111_value.setPadding(0, 0, 0, 1);
             //head layout
             let h0 = head.addStack();
             let lh01 = head.addStack();
@@ -1024,28 +1062,28 @@ async function createWidget() {
             s.lineLimit = 1;
             t1l0.size = new Size(title10.size.width, 0.5);
             t1l0.backgroundColor = lc;
+            title110_name.addSpacer();
+            title110_value.addSpacer();
             {
-                let ct1 = title110.addText("คาบต่อไป");
-                ct1.font = new Font("default", 10);
+                let ct1 = title110_name.addText("เรียนที่");
+                ct1.font = new Font("default", 12);
                 ct1.lineLimit = 1;
-                let ct2 = title110.addText("คาบต่อต่อไป");
-                ct2.font = new Font("default", 10);
+                let ct2 = title111_name.addText("ผู้กำกับ");
+                ct2.font = new Font("default", 12);
                 ct2.lineLimit = 1;
+                title111_name.addSpacer();
             }
             {
-                for (let i = 0; i <= 1; i++) {
-                    let ch = currentPariod + 1 + i;
-                    let ct1;
-                    let s = currentSubjectDay.getSubject(ch);
-                    // if (currentSubjectDay.getSubject(ch)) {
-                    //     ct1 = title111.addText(": " + currentSubjectDay.getSubject(ch).getName());
-                    // } else {
-                    //     ct1 = title111.addText(": ");
-                    // }
-                    ct1 = title111.addText(s ? `: ${s.getName()}` : `: `);
-                    ct1.font = new Font("default", 10);
-                    ct1.lineLimit = 1;
-                }
+                let this_font = new Font("default", 12);
+                let ct1;
+                ct1 = title110_value.addText(currentSubject && currentSubject.getRoomId() ? `: ${currentSubject.getLocaleRoomId()}` : `: `);
+                ct1.font = this_font;
+                ct1.lineLimit = 1;
+                let ct2;
+                ct2 = title111_value.addText(currentSubject && currentSubject.getTeacher() ? `: ${currentSubject.getLocaleTeacherName()}` : `: `);
+                ct2.font = this_font;
+                ct2.lineLimit = 1;
+                title111_value.addSpacer();
             }
             //info value set
             cname.centerAlignContent();
@@ -1145,19 +1183,6 @@ async function notific(title, text) {
     n.body = text;
     return n.schedule();
 }
-// January 14, 2012Mike Bostock
-function shuffle(array) {
-    var m = array.length, t, i;
-    // While there remain elements to shuffle…
-    while (m) {
-        // Pick a remaining element…
-        i = Math.floor(Math.random() * m--);
-        // And swap it with the current element.
-        t = array[m];
-        array[m] = array[i];
-        array[i] = t;
-    }
-}
 function getWelcome(timeminute) {
     if (timeminute >= 1140)
         return "สวัสดีตอนกลางคืน";
@@ -1200,7 +1225,7 @@ async function getRandomBackgroundImage(forceUrl) {
             ];
         }
         //Shuffle urlList
-        shuffle(urlList);
+        urlList.sort(() => Math.random() - 0.5);
     }
     //store Image
     let img;
@@ -1282,5 +1307,3 @@ if (config.runsInWidget || args.shortcutParameter) {
     Script.complete();
 }
 // END
-// Make this file a module
-export { ClassData };
