@@ -337,7 +337,7 @@ class ClassData {
             let raw_s = data.nullSubject;
             s.setId(raw_s.id);
             s.setName(raw_s.name);
-            s.setPeriod(raw_s.period);
+            s.setPeriod(null);
             s.setRoomId(raw_s.roomId);
             s.setStartTime(0);
             s.setTeacher(raw_s.teacher);
