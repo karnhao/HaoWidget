@@ -1,7 +1,6 @@
 {
     "classId": 72610,
     "className": "ม.6/10",
-    "startTime": 500,
     "classWidth": 50,
     "nullSubject": {
         "id": null,
@@ -29,7 +28,9 @@
                         "Mr. Jomer Fonclara Piang"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQ2OTc4NTIxNzA0",
+                    "meet": "https://classroom.google.com/c/MzQ2OTc4NTIxNzA0"
                 },
                 {
                     "id": "ส33101",
@@ -38,7 +39,9 @@
                         "ครูธเนศ วิริยะมนตรี"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzM5OTc1NDI0MTMx",
+                    "meet": "https://meet.google.com/lookup/a2gnjcjiut"
                 },
                 {
                     "id": "ว30250",
@@ -47,7 +50,9 @@
                         "ครูพรพิมล จงรักวิทย์"
                     ],
                     "roomId": "236",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQyODQ0NTcxNDU0",
+                    "meet": "https://meet.google.com/lookup/h5t2bffjlx"
                 },
                 {
                     "id": "ว30250",
@@ -56,7 +61,9 @@
                         "ครูพรพิมล จงรักวิทย์"
                     ],
                     "roomId": "236",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQyODQ0NTcxNDU0",
+                    "meet": "https://meet.google.com/lookup/h5t2bffjlx"
                 },
                 {
                     "id": null,
@@ -73,8 +80,8 @@
                     ],
                     "roomId": "โดม2",
                     "width": 50,
-                    "meet": "https://meet.google.com/lookup/bak24mqc2d",
-                    "classroom": "https://classroom.google.com/c/MzQyODUxMTI5NzAw"
+                    "classroom": "https://classroom.google.com/c/MzQyODUxMTI5NzAw",
+                    "meet": "https://meet.google.com/lookup/bak24mqc2d"
                 },
                 {
                     "id": "ท33101",
@@ -84,8 +91,8 @@
                     ],
                     "roomId": "947",
                     "width": 50,
-                    "meet": "https://meet.google.com/lookup/gy7qeio2kr",
-                    "classroom": "https://classroom.google.com/c/MzQzNTMzMDUzOTEx"
+                    "classroom": "https://classroom.google.com/c/MzQzNTMzMDUzOTEx",
+                    "meet": "https://meet.google.com/lookup/gy7qeio2kr"
                 },
                 {
                     "id": "ค33209",
@@ -95,8 +102,8 @@
                     ],
                     "roomId": "947",
                     "width": 50,
-                    "meet": "https://meet.google.com/lookup/ddl73qeq26",
-                    "classroom": "https://classroom.google.com/c/MzQ3MTU0OTMxOTgw"
+                    "classroom": "https://classroom.google.com/c/MzQ3MTU0OTMxOTgw",
+                    "meet": "https://meet.google.com/lookup/ddl73qeq26"
                 }
             ]
         },
@@ -111,7 +118,9 @@
                         "ครูวนิดา หลากจิตร"
                     ],
                     "roomId": "246",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzMTg1Njc1MDk1",
+                    "meet": "https://meet.google.com/lookup/fufgbkvkxn"
                 },
                 {
                     "id": "ว30210",
@@ -120,7 +129,9 @@
                         "ครูวนิดา หลากจิตร"
                     ],
                     "roomId": "246",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzMTg1Njc1MDk1",
+                    "meet": "https://meet.google.com/lookup/fufgbkvkxn"
                 },
                 {
                     "id": "ค33201",
@@ -129,7 +140,9 @@
                         "ครูอรนันท์ จันทร์ประภาพ"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MTI1NzQwMjYyNjMy",
+                    "meet": "https://meet.google.com/lookup/cibyla6737"
                 },
                 {
                     "id": "พ33101",
@@ -138,7 +151,9 @@
                         "ครูทิพรวี เตชะหงษา"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQ3MTA1NDM1NTE2",
+                    "meet": "https://meet.google.com/lookup/cgxa7nqjtg"
                 },
                 {
                     "id": null,
@@ -154,7 +169,9 @@
                         "ครูณัฐพล มั่นเรือง"
                     ],
                     "roomId": "217",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQ3MDU3MTc4MTUw",
+                    "meet": "https://meet.google.com/lookup/a7u5vdbdcy"
                 },
                 {
                     "id": "อ33205",
@@ -163,7 +180,9 @@
                         "ครูพิชฎาณัฏฐ์ มหาชัย"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzMzYxMzc1ODUx",
+                    "meet": "https://meet.google.com/lookup/bnq26pd4ng"
                 },
                 {
                     "id": "ว33105",
@@ -172,7 +191,9 @@
                         "ครูอักษราภัค สิทธิพรรัตนมณี"
                     ],
                     "roomId": "126",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQyNTI0MDMxMjkx",
+                    "meet": "https://meet.google.com/lookup/bg2patucga"
                 }
             ]
         },
@@ -187,7 +208,9 @@
                         "ครูอรนันท์ จันทร์ประภาพ"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MTI1NzQwMjYyNjMy",
+                    "meet": "https://meet.google.com/lookup/cibyla6737"
                 },
                 {
                     "id": "อ33101",
@@ -239,7 +262,7 @@
                     ],
                     "roomId": "947",
                     "width": 50,
-                    "classroom": "https://classroom.google.com/u/1/c/MzQzNTMzMDUzOTEx",
+                    "classroom": "https://classroom.google.com/c/MzQzNTMzMDUzOTEx",
                     "meet": "https://meet.google.com/lookup/gy7qeio2kr"
                 },
                 {
@@ -275,7 +298,9 @@
                     "name": "👩‍🏫พบที่ปรึกษา",
                     "teacher": null,
                     "roomId": null,
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQ3MDU4MjM3NDMy",
+                    "meet": "https://meet.google.com/lookup/cbr2fdju7x"
                 },
                 {
                     "id": "ว30265",
@@ -284,7 +309,9 @@
                         "ครูธาราดล สิงห์สูงเนิน"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzM5NDI5OTY4ODY2",
+                    "meet": "https://meet.google.com/lookup/er2np6gv3x"
                 },
                 {
                     "id": "ว30265",
@@ -293,7 +320,9 @@
                         "ครูธาราดล สิงห์สูงเนิน"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzM5NDI5OTY4ODY2",
+                    "meet": "https://meet.google.com/lookup/er2np6gv3x"
                 },
                 {
                     "id": "อ33101",
@@ -320,7 +349,9 @@
                         "ครูพิชามญชุ์ เลิศความเพียร"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzNDg3OTA3ODcz",
+                    "meet": "https://meet.google.com/lookup/bvurl35k7l"
                 },
                 {
                     "id": "อ33205",
@@ -329,7 +360,9 @@
                         "ครูพิชฎาณัฏฐ์ มหาชัย"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzMzYxMzc1ODUx",
+                    "meet": "https://meet.google.com/lookup/bnq26pd4ng"
                 },
                 {
                     "id": "ค33201",
@@ -338,7 +371,9 @@
                         "ครูอรนันท์ จันทร์ประภาพ"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MTI1NzQwMjYyNjMy",
+                    "meet": "https://meet.google.com/lookup/cibyla6737"
                 }
             ]
         },
@@ -353,7 +388,9 @@
                         "ครูวรางค์ สุจริต"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "meet": "https://meet.google.com/lookup/ddl73qeq26",
+                    "classroom": "https://classroom.google.com/c/MzQ3MTU0OTMxOTgw"
                 },
                 {
                     "id": "ว30250",
@@ -362,7 +399,9 @@
                         "ครูพรพิมล จงรักวิทย์"
                     ],
                     "roomId": "236",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQyODQ0NTcxNDU0",
+                    "meet": "https://meet.google.com/lookup/h5t2bffjlx"
                 },
                 {
                     "id": null,
@@ -372,7 +411,9 @@
                         "ครูอรนันท์ จันทร์ประภาพ"
                     ],
                     "roomId": null,
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzU5ODMxMDA4NjI4",
+                    "meet": "https://classroom.google.com/c/MzU5ODMxMDA4NjI4"
                 },
                 {
                     "id": null,
@@ -399,7 +440,9 @@
                         "ครูธันย์ชนก อรัญญิก"
                     ],
                     "roomId": null,
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzU5ODMxMDA4NjI4",
+                    "meet": "https://classroom.google.com/c/MzU5ODMxMDA4NjI4"
                 },
                 {
                     "id": null,
@@ -415,7 +458,9 @@
                         "ครูวีนัฐดา แก้วโท"
                     ],
                     "roomId": "611",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQwMjg2NTAxMzU2",
+                    "meet": "https://meet.google.com/lookup/asuya5qpae"
                 },
                 {
                     "id": "ว30230",
@@ -424,7 +469,9 @@
                         "ครูพิชามญชุ์ เลิศความเพียร"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzNDg3OTA3ODcz",
+                    "meet": "https://meet.google.com/lookup/bvurl35k7l"
                 },
                 {
                     "id": "ว30230",
@@ -433,10 +480,16 @@
                         "ครูพิชามญชุ์ เลิศความเพียร"
                     ],
                     "roomId": "947",
-                    "width": 50
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzNDg3OTA3ODcz",
+                    "meet": "https://meet.google.com/lookup/bvurl35k7l"
                 }
             ]
         },
-        "_6": []
+        "_6": {
+            "day": 6,
+            "startTime": 0,
+            "subjectList": []
+        }
     }
 }

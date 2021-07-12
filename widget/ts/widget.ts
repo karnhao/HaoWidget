@@ -337,11 +337,11 @@ class Subject {
         return this.meet;
     }
     public goClassroom(): void {
-        if (!this.classroom) throw new Error("ไม่ข้อมูล.");
+        if (!this.classroom) throw new Error("ไม่มีข้อมูล.");
         Safari.open(this.classroom);
     }
     public goMeet(): void {
-        if (!this.meet) throw new Error("ไม่ข้อมูล.");
+        if (!this.meet) throw new Error("ไม่มีข้อมูล.");
         Safari.open(this.meet);
     }
 }
@@ -410,6 +410,7 @@ class ClassData {
         for (let i = 0; i < 7; i++) {
             let f = new Function('data', `return data.subjectList._${i};`);
             let sl = f(json);
+            sl?.startTime && this.get(i).setStartTime(sl?.startTime);
             if (Array.isArray(sl.subjectList)) {
                 let s = [];
                 let k = 0;
@@ -430,7 +431,6 @@ class ClassData {
                 }
                 this.get(i).setSubject(s);
             }
-            this.get(i).setStartTime(sl.startTime);
         }
         // SubjectDay.update();
     }
@@ -722,8 +722,8 @@ function main_shortcut(): void {
     switch (command) {
         case "getsubject":
         case "getsubjectname":
-        case "subjectclassroom":
-        case "subjectmeet":
+        case "getsubjectclassroom":
+        case "getsubjectmeet":
             switch (input.length) {
                 case 2:
                     try {
@@ -746,11 +746,19 @@ function main_shortcut(): void {
                 case "getsubjectname":
                     Script.setShortcutOutput(s ? s.getName() : "ไม่มีวิชานี้ในฐานข้อมูล.");
                     break;
-                case "subjectclassroom":
-                    s?.goClassroom();
+                case "getsubjectclassroom":
+                    if (s && s.getClassroomUrl()) {
+                        Script.setShortcutOutput(s.getClassroomUrl());
+                    } else {
+                        throw new Error("ไม่มีข้อมูล url ของห้องเรียนในวิชานี้");
+                    }
                     break;
-                case "subjectmeet":
-                    s?.goMeet();
+                case "getsubjectmeet":
+                    if (s && s.getMeetUrl()) {
+                        Script.setShortcutOutput(s.getMeetUrl());
+                    } else {
+                        throw new Error("ไม่มีข้อมูล url ของการประชุมในวิชานี้");
+                    }
                     break;
             }
             break;
@@ -763,6 +771,8 @@ function main_shortcut(): void {
             Script.setShortcutOutput(ClassData.get(d).getLocaleSubjectList());
             break;
         case "getnextsubject":
+        case "getnextsubjectclassroom":
+        case "getnextsubjectmeet":
             if (input.length == 2) {
                 try {
                     p += parseInt(input[1]);
@@ -771,8 +781,26 @@ function main_shortcut(): void {
                 p++;
             }
             let ss = currentSubjectDay.getSubject(p);
-            Script.setShortcutOutput(ss ? ss.getLocaleSpeakString() : "ไม่มีวิชานี้ในฐานข้อมูล.");
-            break;
+            switch (command) {
+                case "getnextsubject":
+                    Script.setShortcutOutput(ss ? ss.getLocaleSpeakString() : "ไม่มีวิชานี้ในฐานข้อมูล.");
+                    break;
+                case "getnextsubjectclassroom":
+                    if (ss && ss.getClassroomUrl()) {
+                        Script.setShortcutOutput(ss.getClassroomUrl());
+                        break;
+                    } else {
+                        throw new Error("ไม่มีข้อมูล url ของห้องเรียนในวิชานี้");
+                    }
+                case "getnextsubjectmeet":
+                    if (ss && ss.getMeetUrl()) {
+                        Script.setShortcutOutput(ss.getMeetUrl());
+                        break;
+                    } else {
+                        throw new Error("ไม่มีข้อมูล url ของการประชุมในวิชานี้");
+                    }
+            }
+
         default: Script.setShortcutOutput("Error : มีบางอย่างผิดพลาด");
             break;
     }
