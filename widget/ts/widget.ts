@@ -800,7 +800,7 @@ function main_shortcut(): void {
                         throw new Error("ไม่มีข้อมูล url ของการประชุมในวิชานี้");
                     }
             }
-
+            break;
         default: Script.setShortcutOutput("Error : มีบางอย่างผิดพลาด");
             break;
     }
