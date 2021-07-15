@@ -238,7 +238,7 @@ class Subject {
         let t_arr = this.teacher;
         let out = "";
         for (let i = 0; i < t_arr.length; i++) {
-            out += (i == t_arr.length - 1) ? `${t_arr[i]}` : `${t_arr[i]} และ `;
+            out += (i == t_arr.length - 1) ? `${t_arr[i]}` : (i == t_arr.length - 2) ? `${t_arr[i]} และ ` : `${t_arr[i]}, `;
         }
         return out;
     }
@@ -325,10 +325,10 @@ class Subject {
      * @returns {String} ข้อความที่มนุษย์อ่านได้.
      */
     public getLocaleSpeakString(): string {
-        return ` คาบที่ ${this.getLocalePeriod()} ของวัน.\n เรียนวิชา : ${this.getName()}.\n รหัส : ${this.getLocaleSpeakId()}\n`
-            + ` เรียนที่ : ${this.getLocaleRoomId()}\n`
-            + ` ตั้งแต่เวลา : ${this.getLocaleStartTime()} น. ถึง ${this.getLocaleEndTime()} น.\n เป็นเวลา : ${this.getWidth()} นาที.\n`
-            + ` ครูผู้สอนคือ : ${this.getLocaleTeacherName()}.`;
+        return ` คาบที่ ${this.getLocalePeriod()} ของวัน.\n ` + (this.name ? `เรียนวิชา : ${this.getName()}.\n` : '') + (this.id ? ` รหัส : ${this.getLocaleSpeakId()}\n` : '')
+            + (this.roomId ? ` เรียนที่ : ${this.getLocaleRoomId()}\n` : '')
+            + ` ตั้งแต่เวลา : ${this.getLocaleStartTime()} น. ถึง ${this.getLocaleEndTime()} น.\n เป็นเวลา : ${this.getWidth()} นาที.`
+            + (this.teacher ? `\n ครูผู้สอนคือ : ${this.getLocaleTeacherName()}.` : '');
     }
     public getClassroomUrl(): string | null {
         return this.classroom;
@@ -585,7 +585,7 @@ class SubjectDay {
                 let last_subject_period = last_subject.getPeriod();
                 s.setStartTime((last_subject) ? last_subject.getEndTime() : 0);
                 s.setPeriod((last_subject && last_subject_period) ? last_subject_period + 1 : -1);
-                s.setWidth(Infinity);
+                s.setWidth(1440 - s.getStartTime());
             }
             return s;
         } else {
@@ -749,15 +749,11 @@ function main_shortcut(): void {
                 case "getsubjectclassroom":
                     if (s && s.getClassroomUrl()) {
                         Script.setShortcutOutput(s.getClassroomUrl());
-                    } else {
-                        throw new Error("ไม่มีข้อมูล url ของห้องเรียนในวิชานี้");
                     }
                     break;
                 case "getsubjectmeet":
                     if (s && s.getMeetUrl()) {
                         Script.setShortcutOutput(s.getMeetUrl());
-                    } else {
-                        throw new Error("ไม่มีข้อมูล url ของการประชุมในวิชานี้");
                     }
                     break;
             }
@@ -789,15 +785,11 @@ function main_shortcut(): void {
                     if (ss && ss.getClassroomUrl()) {
                         Script.setShortcutOutput(ss.getClassroomUrl());
                         break;
-                    } else {
-                        throw new Error("ไม่มีข้อมูล url ของห้องเรียนในวิชานี้");
                     }
                 case "getnextsubjectmeet":
                     if (ss && ss.getMeetUrl()) {
                         Script.setShortcutOutput(ss.getMeetUrl());
                         break;
-                    } else {
-                        throw new Error("ไม่มีข้อมูล url ของการประชุมในวิชานี้");
                     }
             }
             break;
