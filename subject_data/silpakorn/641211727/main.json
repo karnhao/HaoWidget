@@ -1,0 +1,77 @@
+{
+    "classId": null,
+    "className": "ธุระกิจและภาษา(ญี่ปุ่น)",
+    "nullSubject": {
+        "id": null,
+        "name": "❌ไม่มี",
+        "teacher": null,
+        "roomId": null,
+        "width": null,
+        "meet": null,
+        "classroom": null
+    },
+    "subjectList": {
+        "_0": {
+            "day": 0,
+            "startTime": 0,
+            "subjectList": []
+        },
+        "_1": {
+            "day": 1,
+            "startTime": 620,
+            "subjectList": [
+                {
+                    "id": "764 171-2561(2)",
+                    "name": "🎌ภาษายุ่น(ชาวญี่ปุ่น)",
+                    "teacher": [
+                        "Naoya"
+                    ],
+                    "roomId": "บางรัก",
+                    "width": 105,
+                    "classroom": "https://classroom.google.com/c/MzY5MDg5NDQxNDIy",
+                    "meet": "https://meet.google.com/lookup/ak2mowmobc"
+                },
+                {
+                    "name":"🍗พักกลางวัน",
+                    "width": 55
+                },
+                {
+                    "id": "084 104-59(3)",
+                    "name": "➗สถิติในชีวิตประจำวัน",
+                    "teacher": [
+                        "Teera Kulsawat"
+                    ],
+                    "roomId": "บางรัก",
+                    "width": 220,
+                    "classroom": "https://classroom.google.com/c/MzY3NzU1OTY2MDc5",
+                    "meet": "https://classroom.google.com/c/MzY3NzU1OTY2MDc5"
+                }
+            ]
+        },
+        "_2": {
+            "day": 2,
+            "startTime": 0,
+            "subjectList": []
+        },
+        "_3": {
+            "day": 3,
+            "startTime": 0,
+            "subjectList": []
+        },
+        "_4": {
+            "day": 4,
+            "startTime": 0,
+            "subjectList": []
+        },
+        "_5": {
+            "day": 5,
+            "startTime": 0,
+            "subjectList": []
+        },
+        "_6": {
+            "day": 6,
+            "startTime": 0,
+            "subjectList": []
+        }
+    }
+}
