@@ -529,7 +529,7 @@ class SubjectDay {
             let s = ClassData.getNullSubject();
             if (s) {
                 s.setStartTime(0);
-                s.setWidth(this.subject.length > 0 ? this.getStartTime() : Infinity);
+                s.setWidth(this.subject.length > 0 ? this.getStartTime() : 1440);
                 s.setPeriod(-1);
             }
             return s;
