@@ -232,10 +232,8 @@ class Subject {
      * @returns รายชื่อครูประจำวิชาในภาษามนุษย์ทั่วไป
      */
     public getLocaleTeacherName(): string {
-        if (!this.teacher) {
-            return "ไม่มีข้อมูล";
-        }
         let t_arr = this.teacher;
+        if (!t_arr) return "";
         let out = "";
         for (let i = 0; i < t_arr.length; i++) {
             out += (i == t_arr.length - 1) ? `${t_arr[i]}` : (i == t_arr.length - 2) ? `${t_arr[i]} และ ` : `${t_arr[i]}, `;
@@ -253,12 +251,9 @@ class Subject {
      * 
      * @returns {String}
      */
-    public getLocaleRoomId(): string | null {
-        if (!this.getRoomId()) {
-            return "ไม่มีข้อมูล";
-        }
+    public getLocaleRoomId(): string {
         let ins = this.getRoomId();
-        if (!ins) return null;
+        if (!ins) return "";
         let out = ins[0];
         for (let i = 1; i < ins.length; i++) {
             out += isNaN(Number(ins[i])) || ins[i].match("\\s+") || ins[i - 1].match("\\s+") ? ins[i] : ` ${ins[i]}`;
@@ -653,21 +648,20 @@ class SubjectDay {
     }
 }
 
-
-// SET DATA.
-// if (raw_json) {
-//     ClassData.setData(raw_json);
-// }
-
 // global current date day.
 const currentDate = new Date();
 var currentDay = currentDate.getDay();
 
 // global variable.
+/**
+ * _เวลาที่เป็นหน่วยนาทีตั้งแต่ 0:00น ถึงปัจจุบัน._
+ */
 var currentMinutes: number;
 var currentSubjectDay: SubjectDay = new SubjectDay(0);
 var currentPariod: number = -1;
 var currentSubject: Subject | null;
+
+let innerBackgroundColor = Color.dynamic(new Color("#FFFFFF", 0.2), new Color("#000000", 0.2));
 
 // widget parameter >> ----------------------------------------------------->>>.
 if (args.widgetParameter != null) {
@@ -828,7 +822,7 @@ async function createWidget(): Promise<ListWidget> {
     }
 
     // inner background color
-    let innerBackgroundColor = Color.dynamic(new Color("#FFFFFF", 0.2), new Color("#000000", 0.2))
+
 
     // background image
     try {
@@ -839,501 +833,914 @@ async function createWidget(): Promise<ListWidget> {
     }
 
     switch (widgetFamily) {
-        /*--------------------------
-        // Small/.       Widget >>>
-        ----------------------------*/
-
         case "small": {
-
-            // โครงสร้าง layout
-            // hwid layout  
-            let head = hwid.addStack();
-            let l0 = hwid.addStack();   //เส้นแบ่ง
-            let title = hwid.addStack();
-            let l1 = hwid.addStack();   //เส้นแบ่ง
-            let time = hwid.addStack();
-            let l2 = hwid.addStack();   //เส้นแบ่ง
-            let body = hwid.addStack();
-            let l3 = hwid.addStack();   //เส้นแบ่ง
-            let end = hwid.addStack();
-
-            // hwid layout size  
-            head.size = new Size(widgetSmallSize, widgetSmallSize * 1 / 9);
-            end.size = new Size(widgetSmallSize, widgetSmallSize * 1 / 9);
-            time.size = new Size(widgetSmallSize, widgetSmallSize * 1 / 9);
-            title.size = new Size(widgetSmallSize, widgetSmallSize * 3.5 / 9);
-            body.size = new Size(widgetSmallSize, widgetSmallSize * 2.5 / 9);
-
-            let lsize = new Size(widgetSmallSize, 0.5);
-            l0.size = lsize;
-            l1.size = lsize;
-            l2.size = lsize;
-            l3.size = lsize;
-
-            // hwid layout design  
-            let lcolor = new Color("#FFFFFF", 0.5);
-            l0.backgroundColor = lcolor;
-            l1.backgroundColor = lcolor;
-            l2.backgroundColor = lcolor;
-            l3.backgroundColor = lcolor;
-
-            title.backgroundColor = innerBackgroundColor;
-
-            body.backgroundColor = innerBackgroundColor;
-
-            // time layout
-            time.layoutHorizontally();
-
-            let time0 = time.addStack();
-            let time1 = time.addStack();
-
-            // time0 time1 size
-            time0.size = new Size(time.size.width / 2, time.size.height);
-            time1.size = new Size(time.size.width / 2, time.size.height);
-
-            // body layout  
-            body.layoutHorizontally();
-
-            let body0 = body.addStack();
-            let body1 = body.addStack();
-
-            // body0 body1 size
-            body0.size = new Size(body.size.width / 2, body.size.height);
-            body1.size = body0.size;
-
-            // value set  
-
-            // title
-            {
-                title.layoutVertically();
-                let tc = title.addText("คาบที่ " + (currentPariod + 1));
-                tc.font = new Font("default", 9);
-                let t0 = title.addText("กำลังเรียนวิชา 📖");
-                t0.font = new Font("default", 12);
-                let t1 = title.addText(currentSubject ? currentSubject.getLocaleName() : "NULL");
-
-                t1.textColor = new Color("#0004FF", 1);
-                t1.font = new Font("default", 17);
-                t1.lineLimit = 1;
-
-            }
-
-            // time0
-            {
-                time0.layoutHorizontally();
-                time0.centerAlignContent();
-                let t0 = time0.addText(currentDate.toLocaleDateString());
-                t0.font = new Font("defalut", 10);
-                t0.lineLimit = 1;
-            }
-
-            // time1
-            {
-                time1.layoutHorizontally();
-                time1.centerAlignContent();
-                let t0 = time1.addText(currentSubject ? currentSubject.getLocaleTime() : "NULL");
-                t0.font = new Font("defalut", 10);
-                t0.lineLimit = 1;
-            }
-
-            // body0
-            {
-                body0.layoutVertically();
-                let t0 = body0.addText("คาบต่อไป");
-                let t1 = body0.addText("คาบต่อต่อไป");
-                t0.font = new Font("default", 10);
-                t1.font = t0.font;
-            }
-
-            // body1
-            {
-                body1.layoutVertically();
-                for (let i = 0; i <= 1; i++) {
-                    let ch = currentPariod + i + 1;
-                    let t0;
-                    let s = currentSubjectDay.getSubject(ch);
-                    t0 = body1.addText(s ? `: ${s.getName()}` : ": ")
-
-                    t0.font = new Font("default", 10);
-                    t0.lineLimit = 1;
-                }
-            }
-
-            // head
-            {
-                head.layoutHorizontally();
-                head.addSpacer();
-                let t0 = head.addText(getSplashText());
-                t0.font = new Font("default", 10);
-                t0.textColor = new Color("#FFFF00", 1);
-                t0.lineLimit = 1;
-                head.addSpacer();
-            }
-
-            // end
-            {
-                end.layoutHorizontally();
-                end.addSpacer();
-                let t0 = end.addText("⚠️ตามตารางเรียนของ " + ClassData.getClassName());
-                t0.font = new Font("default", 8);
-                t0.lineLimit = 1;
-                end.addSpacer();
-            }
-
-            return new Promise((resolve, reject) => {
-                hwid ? resolve(hwid) : reject(null);
-            });
+            return createSmallWidget(hwid, new Size(widgetSmallSize, widgetSmallSize));
         }
         case "medium": {
-
-            /*-------------------
-               Medium widget >>>
-            ---------------------*/
-
-            let t1 = hwid.addText("Not available " + new Date().getSeconds());
-            t1.centerAlignText();
-
-            return new Promise((resolve, reject) => {
-                hwid ? resolve(hwid) : reject(null);
-            });
+            return createMediumWidget(hwid, new Size(widgetLargeSize, widgetSmallSize));
         }
-
         case "large":
-
-            /*-------------------
-               Large widget >>>
-            ---------------------*/
-
-            //line
-            let lc = new Color("#FFFFFF", 0.5);
-
-
-            //Title , Chart
-            let title = hwid.addStack();
-            title.size = new Size(widgetLargeSize * 1.1, widgetLargeSize * 1.4 / 3);
-
-            let lw0 = hwid.addStack();
-            lw0.size = new Size(title.size.width, 0.5);
-            lw0.backgroundColor = lc;
-            let chart = hwid.addStack();
-
-            chart.size = new Size(widgetLargeSize * 1.1, widgetLargeSize * 2 / 3);
-            chart.layoutVertically();
-
-            title.backgroundColor = innerBackgroundColor;
-            title.cornerRadius = 10;
-
-
-            //Title 1,2
-            let title1 = title.addStack();
-            let lt12 = title.addStack();
-            let title2 = title.addStack();
-            title1.size = new Size(title.size.width / 2, title.size.height);
-            title2.size = title1.size;
-            title2.layoutVertically();
-
-            lt12.size = new Size(0.5, title.size.height);
-            lt12.backgroundColor = lc;
-
-
-            //Info , Time left
-            let info = title2.addStack();
-            info.size = new Size(title2.size.width, title2.size.height * 2.4 / 3);
-            let time = title2.addStack();
-            time.size = new Size(title2.size.width, title2.size.height * 0.6 / 3);
-
-
-            //Chart layout head,body
-            let head = chart.addStack();
-            head.size = new Size(chart.size.width, chart.size.height / 6);
-            head.layoutHorizontally();
-
-            let headline = chart.addStack();
-            headline.size = new Size(chart.size.width, 0.5);
-            headline.backgroundColor = lc;
-
-            let body = chart.addStack();
-
-            body.size = new Size(chart.size.width, chart.size.height * 5 / 6);
-            body.layoutHorizontally();
-
-            body.backgroundColor = innerBackgroundColor;
-            body.cornerRadius = 10;
-
-
-            //title1 layout  
-            let title10 = title1.addStack();
-            let t1l0 = title1.addStack();
-            let title11 = title1.addStack();
-
-            title1.layoutVertically();
-
-
-            //title1 layout size,design
-            title10.size = new Size(title1.size.width, title1.size.height * 1.9 / 3);
-            title11.size = new Size(title1.size.width, title1.size.height * 1.1 / 3);
-
-            title11.layoutVertically();
-            title10.layoutVertically();
-
-            title10.setPadding(0, 5, 0, 0);
-
-
-            //title11 layout
-            let title110 = title11.addStack();
-            let title111 = title11.addStack();
-
-            //title11 layout size,design 2.0
-            title110.size = new Size(title11.size.width, title11.size.height * 1 / 2);
-            title111.size = new Size(title11.size.width, title11.size.height * 1 / 2);
-
-            title110.layoutHorizontally();
-            title111.layoutHorizontally();
-
-            //title110,title111 layout <- title11 2.0
-            let title110_name = title110.addStack();
-            let title111_name = title111.addStack();
-            let title110_value = title110.addStack();
-            let title111_value = title111.addStack();
-
-            title110_name.layoutVertically();
-            title111_name.layoutVertically();
-            title110_value.layoutVertically();
-            title111_value.layoutVertically();
-
-            //title110 name,value design
-            title110_name.size = new Size(title110.size.width * 0.6 / 2, title110.size.height);
-            title110_value.size = new Size(title110.size.width * 1.4 / 2, title110.size.height);
-
-            title110_name.setPadding(0, 5, 0, 0);
-            title110_value.setPadding(0, 0, 0, 1);
-
-            //title111 name,value design
-            title111_name.size = new Size(title110_name.size.width, title111.size.height);
-            title111_value.size = new Size(title110_value.size.width, title111.size.height);
-
-            title111_name.setPadding(0, 5, 0, 0);
-            title111_value.setPadding(0, 0, 0, 1);
-
-            //head layout
-            let h0 = head.addStack();
-
-            let lh01 = head.addStack();
-
-            let h1 = head.addStack();
-            let h2 = head.addStack();
-
-            h0.size = new Size(head.size.width * 0.2, head.size.height);
-
-            h1.size = new Size(head.size.width * 0.4, head.size.height);
-
-            h2.size = new Size(head.size.width * 0.4, head.size.height);
-
-            lh01.size = new Size(0.5, head.size.height);
-            lh01.borderWidth = 0.5;
-            lh01.borderColor = lc;
-
-
-            //body layout
-            let b0 = body.addStack();
-            let b1 = body.addStack();
-            let b2 = body.addStack();
-
-            b0.size = new Size(body.size.width * 0.2, body.size.height);
-
-            b1.size = new Size(body.size.width * 0.5, body.size.height);
-
-            b2.size = new Size(body.size.width * 0.3, body.size.height);
-            b0.layoutVertically();
-            b1.layoutVertically();
-            b2.layoutVertically();
-
-
-            //info layout
-            info.layoutVertically();
-            let cname = info.addStack();
-            cname.size = new Size(info.size.width, info.size.height * 7.5 / 25);
-
-            let hello = info.addStack();
-            hello.size = new Size(info.size.width, info.size.height * 7.5 / 25)
-            hello.centerAlignContent();
-
-            let day = info.addStack();
-            day.size = new Size(info.size.width, info.size.height * 10 / 25);
-            day.centerAlignContent();
-
-
-            //present font,color
-            let pf = new Font("Arial", 12);
-            let pc = new Color("#FFFF00", 1);
-
-            //font
-            let f = new Font("Arial", 12)
-
-            //b0 layout , value set
-            for (let i = 0; i <= 3; i++) {
-                let ci = i;
-                if (currentPariod == -1) {
-                    ci++;
-                }
-                let ch = currentPariod + ci;
-                let b0i = b0.addStack();
-                b0i.centerAlignContent();
-                b0i.size = new Size(b0.size.width, b0.size.height / 4);
-                let t: WidgetText;
-                if (currentSubjectDay.getSubject(ch - 1)) {
-                    t = b0i.addText(ch.toString());
-                } else {
-                    t = b0i.addText("");
-                }
-                if (currentPariod + 1 == ch) {
-                    t.font = pf;
-                    t.textColor = pc;
-                } else {
-                    t.font = f;
-                }
-            }
-
-            //b1 layout , value set
-            for (let i = 0; i <= 3; i++) {
-                let ci = i;
-                if (currentPariod == -1) {
-                    ci++;
-                }
-                let ch = currentPariod + ci;
-                let bi = b1.addStack();
-                bi.centerAlignContent();
-                bi.size = new Size(b1.size.width, b1.size.height / 4);
-                let t: WidgetText;
-                let s = currentSubjectDay.getSubject(ch - 1);
-                t = bi.addText(s ? s.getLocaleName() : "");
-
-                if (currentPariod + 1 == ch) {
-                    t.font = pf;
-                    t.textColor = pc;
-                } else {
-                    t.font = f;
-                }
-                t.lineLimit = 1;
-                bi.addSpacer();
-            }
-
-            //b2 layout , value set
-            for (let i = 0; i <= 3; i++) {
-                let ci = i;
-                if (currentPariod == -1) {
-                    ci++;
-                }
-                let ch = currentPariod + ci;
-                let bi = b2.addStack();
-                bi.centerAlignContent();
-                bi.size = new Size(b2.size.width, b2.size.height / 4);
-                let t: WidgetText;
-                let s = currentSubjectDay.getSubject(ch - 1);
-                t = bi.addText(s ? s.getLocaleTime() : "");
-
-                bi.addSpacer();
-                if (currentPariod + 1 == ch) {
-                    t.font = pf;
-                    t.textColor = pc;
-                } else {
-                    t.font = f;
-                }
-                t.lineLimit = 1;
-            }
-
-            //head value set : h0-2
-            h0.centerAlignContent();
-            h1.centerAlignContent();
-            h2.centerAlignContent();
-
-            h0.addText("คาบ").font = f;
-            h1.addSpacer(12);
-            h1.addText("วิชา").font = f;
-            h2.addText("เวลา").font = f;
-
-            h1.addSpacer();
-
-            //title1... value set
-            let ct = title10.addText("คาบที่ " + (currentPariod + 1).toString());
-            ct.font = new Font("Arial", 10);
-            ct.lineLimit = 1;
-
-            let t1T0 = title10.addText("กำลังเรียนวิชา 📖");
-            t1T0.font = new Font("default", 15);
-            t1T0.textColor = new Color("#FFFFAA", 1)
-
-            let s = title10.addText(currentSubject ? currentSubject.getLocaleName() : "NULL");
-
-            s.font = Font.boldSystemFont(18);
-            s.textColor = Color.dynamic(new Color("#3333FF", 1), new Color("#BBBBFF", 1));
-            s.lineLimit = 1;
-
-            t1l0.size = new Size(title10.size.width, 0.5);
-            t1l0.backgroundColor = lc;
-
-            title110_name.addSpacer();
-            title110_value.addSpacer();
-
-            {
-                let ct1 = title110_name.addText("เรียนที่");
-                ct1.font = new Font("default", 12);
-                ct1.lineLimit = 1;
-
-                let ct2 = title111_name.addText("ผู้กำกับ");
-                ct2.font = new Font("default", 12);
-                ct2.lineLimit = 1;
-                title111_name.addSpacer();
-            }
-            {
-                let this_font: Font = new Font("default", 12);
-                let ct1: WidgetText;
-                ct1 = title110_value.addText(currentSubject?.getRoomId() ? `: ${currentSubject.getRoomId()}` : `: `);
-                ct1.font = this_font;
-                ct1.lineLimit = 1;
-
-                let ct2: WidgetText;
-                ct2 = title111_value.addText(currentSubject?.getTeacher() ? `: ${currentSubject.getLocaleTeacherName()}` : `: `);
-                ct2.font = this_font;
-                ct2.lineLimit = 1;
-                title111_value.addSpacer();
-            }
-
-            //info value set
-            cname.centerAlignContent();
-            let cnameT = cname.addText("⚠️ตามตารางเรียนของ " + ClassData.getClassName());
-            cnameT.font = new Font("default", 10);
-            cnameT.centerAlignText();
-
-
-            //hello value
-            hello.layoutHorizontally();
-            hello.bottomAlignContent();
-            let helloT = hello.addText(getWelcome(currentMinutes)); {
-                let font = Font.boldSystemFont(16);
-                helloT.font = font;
-            }
-
-
-            // day value
-            let dayT = day.addDate(currentDate); {
-                let font = Font.boldSystemFont(16);
-                dayT.font = font;
-                dayT.centerAlignText();
-                day.layoutHorizontally();
-                day.topAlignContent();
-            }
-
-            let timeT = time.addText(getSplashText());
-            timeT.font = new Font("Arial", 14);
-            time.centerAlignContent();
-            timeT.textColor = new Color("FFFF00", 1);
-
-            //complete
-            return new Promise((resolve, reject) => {
-                hwid ? resolve(hwid) : reject(null);
-            });
+            return createLargeWidget(hwid, new Size(widgetLargeSize, widgetLargeSize));
     }
+    return new Promise((resolve, reject) => {
+        reject(null);
+    });
+}
+
+/**
+ * สร้าง widget ขนาดเล็ก และค่าในแต่ละ layout
+ * @author Sittipat Tepsutar
+ * @returns {Promise<ListWidget>} Promise > ListWidget
+ * @param {ListWidget} widget widget.
+ * @param {Size} size size.
+ */
+async function createSmallWidget(hwid: ListWidget, size: Size): Promise<ListWidget> {
+    /*--------------------------
+        Small.     Widget >>>
+    ----------------------------*/
+    // โครงสร้าง layout
+    // hwid layout  
+    let head = hwid.addStack();
+    let l0 = hwid.addStack();   //เส้นแบ่ง
+    let title = hwid.addStack();
+    let l1 = hwid.addStack();   //เส้นแบ่ง
+    let time = hwid.addStack();
+    let l2 = hwid.addStack();   //เส้นแบ่ง
+    let body = hwid.addStack();
+    let l3 = hwid.addStack();   //เส้นแบ่ง
+    let end = hwid.addStack();
+
+    // hwid layout size  
+    head.size = new Size(size.width, size.height * 1 / 9);
+    end.size = new Size(size.width, size.height * 1 / 9);
+    time.size = new Size(size.width, size.height * 1 / 9);
+    title.size = new Size(size.width, size.height * 3.5 / 9);
+    body.size = new Size(size.width, size.height * 2.5 / 9);
+
+    let lsize = new Size(size.width, 0.5);
+    l0.size = lsize;
+    l1.size = lsize;
+    l2.size = lsize;
+    l3.size = lsize;
+
+    // hwid layout design  
+    let lcolor = new Color("#FFFFFF", 0.5);
+    l0.backgroundColor = lcolor;
+    l1.backgroundColor = lcolor;
+    l2.backgroundColor = lcolor;
+    l3.backgroundColor = lcolor;
+
+    title.backgroundColor = innerBackgroundColor;
+
+    body.backgroundColor = innerBackgroundColor;
+
+    // time layout
+    time.layoutHorizontally();
+
+    let time0 = time.addStack();
+    let time1 = time.addStack();
+
+    // time0 time1 size
+    time0.size = new Size(time.size.width / 2, time.size.height);
+    time1.size = new Size(time.size.width / 2, time.size.height);
+
+    // body layout  
+    body.layoutHorizontally();
+
+    let body0 = body.addStack();
+    let body1 = body.addStack();
+
+    // body0 body1 size
+    body0.size = new Size(body.size.width / 2, body.size.height);
+    body1.size = body0.size;
+
+    // value set  
+
+    // title
+    {
+        title.layoutVertically();
+        let tc = title.addText("คาบที่ " + (currentPariod + 1));
+        tc.font = new Font("default", 9);
+        let t0 = title.addText("กำลังเรียนวิชา 📖");
+        t0.font = new Font("default", 12);
+        let t1 = title.addText(currentSubject ? currentSubject.getLocaleName() : "NULL");
+
+        t1.textColor = new Color("#0004FF", 1);
+        t1.font = new Font("default", 17);
+        t1.lineLimit = 1;
+
+    }
+
+    // time0
+    {
+        time0.layoutHorizontally();
+        time0.centerAlignContent();
+        let t0 = time0.addText(currentDate.toLocaleDateString());
+        t0.font = new Font("defalut", 10);
+        t0.lineLimit = 1;
+    }
+
+    // time1
+    {
+        time1.layoutHorizontally();
+        time1.centerAlignContent();
+        let t0 = time1.addText(currentSubject ? currentSubject.getLocaleTime() : "NULL");
+        t0.font = new Font("defalut", 10);
+        t0.lineLimit = 1;
+    }
+
+    // body0
+    {
+        body0.layoutVertically();
+        let t0 = body0.addText("คาบต่อไป");
+        let t1 = body0.addText("คาบต่อต่อไป");
+        t0.font = new Font("default", 10);
+        t1.font = t0.font;
+    }
+
+    // body1
+    {
+        body1.layoutVertically();
+        for (let i = 0; i <= 1; i++) {
+            let ch = currentPariod + i + 1;
+            let t0;
+            let s = currentSubjectDay.getSubject(ch);
+            t0 = body1.addText(s ? `: ${s.getName()}` : ": ")
+
+            t0.font = new Font("default", 10);
+            t0.lineLimit = 1;
+        }
+    }
+
+    // head
+    {
+        head.layoutHorizontally();
+        head.addSpacer();
+        let t0 = head.addText(getSplashText());
+        t0.font = new Font("default", 10);
+        t0.textColor = new Color("#FFFF00", 1);
+        t0.lineLimit = 1;
+        head.addSpacer();
+    }
+
+    // end
+    {
+        end.layoutHorizontally();
+        end.addSpacer();
+        let t0 = end.addText("⚠️ตามตารางเรียนของ " + ClassData.getClassName());
+        t0.font = new Font("default", 8);
+        t0.lineLimit = 1;
+        end.addSpacer();
+    }
+
+    return new Promise((resolve, reject) => {
+        hwid ? resolve(hwid) : reject(null);
+    });
+}
+
+/**
+ * สร้าง widget ขนาดกลาง และค่าในแต่ละ layout
+ * @author Sittipat Tepsutar
+ * @returns {Promise<ListWidget>} Promise > ListWidget
+ * @param {ListWidget} widget widget.
+ * @param {Size} size size.
+ */
+async function createMediumWidget(widget: ListWidget, size: Size): Promise<ListWidget> {
+    /*-------------------
+       Medium widget >>>
+    ---------------------*/
+    let lcolor = new Color("#FFFFFF", 0.5);
+    let urlFont = Font.thinSystemFont(12);
+    let urlColor = new Color("#B0FFFF", 1);
+    let normalFont = Font.systemFont(12);
+    let bigFont = Font.boldRoundedSystemFont(18);;
+    let bigColor = new Color("#30CFFF", 1);
+
+    // A layout
+    let A = widget.addStack();
+    A.size = new Size(size.width * 1.1, size.height);
+    A.layoutHorizontally();
+    A.setPadding(0, 0, 0, 0);
+    A.cornerRadius = 10;
+    A.backgroundColor = innerBackgroundColor;
+
+    //a1
+    let a1 = A.addStack();
+    a1.size = new Size((A.size.width / 2) - 5, A.size.height);
+    a1.layoutVertically();
+    a1.setPadding(0, 0, 0, 0);
+
+    //a1_b
+    let a1_b1 = a1.addStack();
+    a1_b1.size = a1.size;
+    a1_b1.layoutVertically();
+    a1_b1.setPadding(0, 0, 0, 0);
+
+    //a1_b1_c
+    let a1_b1_c1 = a1_b1.addStack();
+
+    //a1_b1_c1_a1_b1_c2_spacer
+    {
+        let this_spacer = a1_b1.addStack();
+        this_spacer.size = new Size(a1_b1.size.width, 1);
+        this_spacer.borderColor = lcolor;
+        this_spacer.borderWidth = 0.5;
+    }
+
+    let a1_b1_c2 = a1_b1.addStack();
+
+    //a1_b1_c2_a1_b1_c3_spacer
+    {
+        let this_spacer = a1_b1.addStack();
+        this_spacer.size = new Size(a1_b1.size.width, 1);
+        this_spacer.borderColor = lcolor;
+        this_spacer.borderWidth = 0.5;
+    }
+
+    let a1_b1_c3 = a1_b1.addStack();
+
+    a1_b1_c1.size = new Size(a1_b1.size.width, a1_b1.size.height * 1 / 5);
+    a1_b1_c2.size = new Size(a1_b1.size.width, a1_b1.size.height * 2 / 5);
+    a1_b1_c3.size = new Size(a1_b1.size.width, a1_b1.size.height * 2 / 5);
+
+    a1_b1_c1.layoutHorizontally();
+    a1_b1_c2.layoutVertically();
+    a1_b1_c3.layoutHorizontally();
+
+    a1_b1_c1.setPadding(0, 0, 0, 0);
+    a1_b1_c2.setPadding(0, 0, 0, 0);
+    a1_b1_c3.setPadding(0, 0, 0, 0);
+
+    //a1_b1_c1_d
+    let a1_b1_c1_d1 = a1_b1_c1.addStack();
+    let a1_b1_c1_d2 = a1_b1_c1.addStack();
+
+    a1_b1_c1_d1.size = new Size(a1_b1_c1.size.width * 1 / 2, a1_b1_c1.size.height);
+    a1_b1_c1_d2.size = new Size(a1_b1_c1.size.width * 1 / 2, a1_b1_c1.size.height);
+
+    a1_b1_c1_d1.layoutVertically();
+    a1_b1_c1_d2.layoutVertically();
+
+    a1_b1_c1_d1.setPadding(0, 4, 0, 0);
+    a1_b1_c1_d2.setPadding(0, 0, 0, 0);
+
+    //a1_b1_c1_d2_e
+    a1_b1_c1_d2.addSpacer();
+    let a1_b1_c1_d2_e1 = a1_b1_c1_d2.addStack();
+    a1_b1_c1_d2_e1.layoutHorizontally();
+    a1_b1_c1_d2_e1.setPadding(0, 0, 0, 4);
+    a1_b1_c1_d2.addSpacer();
+
+    //a1_b1_c2_d
+    let a1_b1_c2_d1 = a1_b1_c2.addStack();
+
+    //a1_b1_c2_d1_a1_b1_c2_d2_spacer
+    {
+        let this_spacer = a1_b1_c2.addStack();
+        this_spacer.size = new Size(a1_b1_c2.size.width, 1);
+        this_spacer.borderColor = lcolor;
+        this_spacer.borderWidth = 0.5;
+    }
+
+    let a1_b1_c2_d2 = a1_b1_c2.addStack();
+
+    a1_b1_c2_d1.size = new Size(a1_b1_c2.size.width, a1_b1_c2.size.height * 3 / 4);
+    a1_b1_c2_d2.size = new Size(a1_b1_c2.size.width, a1_b1_c2.size.height * 1 / 4);
+
+    a1_b1_c2_d1.layoutVertically();
+    a1_b1_c2_d2.layoutHorizontally();
+
+    a1_b1_c2_d1.setPadding(0, 4, 0, 0);
+    a1_b1_c2_d2.setPadding(0, 0, 0, 0);
+
+    //a1_b1_c2_d2_e
+    let a1_b1_c2_d2_e1 = a1_b1_c2_d2.addStack();
+    let a1_b1_c2_d2_e2 = a1_b1_c2_d2.addStack();
+
+    a1_b1_c2_d2_e1.size = new Size(a1_b1_c2_d2.size.width * 1 / 2, a1_b1_c2_d2.size.height);
+    a1_b1_c2_d2_e2.size = new Size(a1_b1_c2_d2.size.width * 1 / 2, a1_b1_c2_d2.size.height);
+
+    a1_b1_c2_d2_e1.layoutVertically();
+    a1_b1_c2_d2_e2.layoutHorizontally();
+
+    a1_b1_c2_d2_e1.setPadding(0, 4, 0, 0);
+    a1_b1_c2_d2_e2.setPadding(0, 0, 0, 4);
+
+    //a1_b1_c3_d
+    let a1_b1_c3_d1 = a1_b1_c3.addStack();
+    let a1_b1_c3_d2 = a1_b1_c3.addStack();
+
+    a1_b1_c3_d1.size = new Size(a1_b1_c3.size.width * 1.1 / 3, a1_b1_c3.size.height);
+    a1_b1_c3_d2.size = new Size(a1_b1_c3.size.width * 1.9 / 3, a1_b1_c3.size.height);
+
+    a1_b1_c3_d1.layoutVertically();
+    a1_b1_c3_d2.layoutVertically();
+
+    a1_b1_c3_d1.setPadding(0, 4, 0, 0);
+    a1_b1_c3_d2.setPadding(0, 0, 0, 3);
+
+    //a1_a2_spacer
+    A.addSpacer(5);
+    let a1_a2_spacer = A.addStack();
+    a1_a2_spacer.size = new Size(1, A.size.height);
+    a1_a2_spacer.borderColor = lcolor;
+    a1_a2_spacer.borderWidth = 0.5;
+    A.addSpacer(5);
+
+    //a2
+    let a2 = A.addStack();
+    a2.size = new Size((A.size.width / 2) - 5, A.size.height);
+    a2.layoutVertically();
+    a2.setPadding(0, 0, 0, 0);
+
+    //a2_b
+    let a2_b1 = a2.addStack();
+    a2_b1.size = a2.size;
+    a2_b1.layoutVertically();
+    a2_b1.setPadding(0, 0, 0, 0);
+
+    //a2_b1_c
+    let a2_b1_c1 = a2_b1.addStack();
+
+    //a2_b1_c1_a2_b1_c2_spacer
+    {
+        let this_spacer = a2_b1.addStack();
+        this_spacer.size = new Size(a2_b1.size.width, 1);
+        this_spacer.borderColor = lcolor;
+        this_spacer.borderWidth = 0.5;
+    }
+
+
+    let a2_b1_c2 = a2_b1.addStack();
+
+    //a2_b1_c2_a2_b1_c3_spacer
+    {
+        let this_spacer = a2_b1.addStack();
+        this_spacer.size = new Size(a2_b1.size.width, 1);
+        this_spacer.borderColor = lcolor;
+        this_spacer.borderWidth = 0.5;
+    }
+
+
+    let a2_b1_c3 = a2_b1.addStack();
+
+    a2_b1_c1.size = new Size(a1_b1.size.width, a1_b1.size.height * 1 / 5);
+    a2_b1_c2.size = new Size(a1_b1.size.width, a1_b1.size.height * 2 / 5);
+    a2_b1_c3.size = new Size(a1_b1.size.width, a1_b1.size.height * 2 / 5);
+
+    a2_b1_c1.layoutVertically();
+    a2_b1_c2.layoutVertically();
+    a2_b1_c3.layoutHorizontally();
+
+    a2_b1_c1.setPadding(0, 0, 0, 0);
+    a2_b1_c2.setPadding(0, 0, 0, 0);
+    a2_b1_c3.setPadding(0, 0, 0, 0);
+
+    //a2_b1_c1_d
+    let a2_b1_c1_d1 = a2_b1_c1.addStack();
+    a2_b1_c1_d1.size = a2_b1_c1.size;
+    a2_b1_c1_d1.layoutVertically();
+    a2_b1_c1_d1.setPadding(0, 2, 0, 2);
+
+    //a2_b1_c1_d1_e1
+    a2_b1_c1_d1.addSpacer();
+    let a2_b1_c1_d1_e1 = a2_b1_c1_d1.addStack();
+    a2_b1_c1_d1.addSpacer();
+
+    a2_b1_c1_d1_e1.layoutHorizontally();
+    a2_b1_c1_d1_e1.setPadding(0, 3, 0, 3);
+
+    //a2_b1_c2_d
+    let a2_b1_c2_d1 = a2_b1_c2.addStack();
+
+    //a2_b1_c2_d1_a2_b1_c2_d2_spacer
+    {
+        let this_spacer = a2_b1_c2.addStack();
+        this_spacer.size = new Size(a2_b1_c2.size.width, 1);
+        this_spacer.borderColor = lcolor;
+        this_spacer.borderWidth = 0.5;
+    }
+
+
+    let a2_b1_c2_d2 = a2_b1_c2.addStack();
+
+    a2_b1_c2_d1.size = new Size(a2_b1_c2.size.width, a2_b1_c2.size.height * 3 / 4);
+    a2_b1_c2_d2.size = new Size(a2_b1_c2.size.width, a2_b1_c2.size.height * 1 / 4);
+
+    a2_b1_c2_d1.layoutVertically();
+    a2_b1_c2_d2.layoutHorizontally();
+
+    a2_b1_c2_d1.setPadding(0, 4, 0, 0);
+    a2_b1_c2_d2.setPadding(0, 0, 0, 0);
+
+    //a2_b1_c2_d2_e
+    let a2_b1_c2_d2_e1 = a2_b1_c2_d2.addStack();
+    let a2_b1_c2_d2_e2 = a2_b1_c2_d2.addStack();
+
+    a2_b1_c2_d2_e1.size = new Size(a2_b1_c2_d2.size.width * 1 / 2, a2_b1_c2_d2.size.height);
+    a2_b1_c2_d2_e2.size = new Size(a2_b1_c2_d2.size.width * 1 / 2, a2_b1_c2_d2.size.height);
+
+    a2_b1_c2_d2_e1.layoutVertically();
+    a2_b1_c2_d2_e2.layoutHorizontally();
+
+    a2_b1_c2_d2_e1.setPadding(0, 4, 0, 0);
+    a2_b1_c2_d2_e2.setPadding(0, 0, 0, 4);
+
+    //a2_b1_c3_d
+    let a2_b1_c3_d1 = a2_b1_c3.addStack();
+    let a2_b1_c3_d2 = a2_b1_c3.addStack();
+
+    a2_b1_c3_d1.size = new Size(a2_b1_c3.size.width * 1.1 / 3, a2_b1_c3.size.height);
+    a2_b1_c3_d2.size = new Size(a2_b1_c3.size.width * 1.9 / 3, a2_b1_c3.size.height);
+
+    a2_b1_c3_d1.layoutVertically();
+    a2_b1_c3_d2.layoutVertically();
+
+    a2_b1_c3_d1.setPadding(0, 4, 0, 0);
+    a2_b1_c3_d2.setPadding(0, 0, 0, 3);
+
+    //a1_b1_c1_d1_text/design
+    let w_classname = a1_b1_c1_d1.addText("");
+    w_classname.lineLimit = 1;
+    w_classname.font = normalFont;
+
+    //a1_b1_c1_d2_text/design
+    a1_b1_c1_d2_e1.addSpacer();
+    let w_period = a1_b1_c1_d2_e1.addText("");
+    w_period.lineLimit = 1;
+    w_period.font = normalFont;
+
+    //a1_b1_c2_d1_text/design
+    let w_subject_text = a1_b1_c2_d1.addText("");
+    let w_subject = a1_b1_c2_d1.addText("");
+
+    w_subject_text.lineLimit = w_subject.lineLimit = 1;
+
+    w_subject_text.font = normalFont;
+    w_subject.font = bigFont;
+    w_subject.textColor = bigColor;
+
+    //a1_b1_c2_d2_e1_text/design
+    let w_meet = a1_b1_c2_d2_e1.addText("");
+    w_meet.lineLimit = 1;
+    w_meet.font = urlFont;
+    w_meet.textColor = urlColor;
+
+    //a1_b1_c2_d2_e2_text/design
+    a1_b1_c2_d2_e2.addSpacer();
+    let w_classroom = a1_b1_c2_d2_e2.addText("");
+    w_classroom.lineLimit = 1;
+    w_classroom.font = urlFont;
+    w_classroom.textColor = urlColor;
+
+    //a1_b1_c3_d1_text/design
+    let w_teacher_text = a1_b1_c3_d1.addText("");
+    let w_room_text = a1_b1_c3_d1.addText("");
+    let w_time_text = a1_b1_c3_d1.addText("");
+
+    w_teacher_text.lineLimit = w_room_text.lineLimit = w_time_text.lineLimit = 1;
+    w_teacher_text.font = w_room_text.font = w_time_text.font = normalFont;
+
+    //a1_b1_c3_d2_text/design
+    let w_teacher = a1_b1_c3_d2.addText("");
+    let w_room = a1_b1_c3_d2.addText("");
+    let w_time = a1_b1_c3_d2.addText("");
+
+    w_teacher.lineLimit = w_room.lineLimit = w_time.lineLimit = 1;
+    w_teacher.font = w_room.font = w_time.font = normalFont;
+
+    //a2_b1_c1_d1_text/design
+    a2_b1_c1_d1_e1.addSpacer();
+    let w_date = a2_b1_c1_d1_e1.addDate(currentDate);
+    a2_b1_c1_d1_e1.addSpacer();
+    w_date.lineLimit = 1;
+    w_date.font = Font.mediumRoundedSystemFont(15);
+    w_date.minimumScaleFactor = 0.5;
+
+    //a2_b1_c2_d1_text/design
+    let w_next_subject_text = a2_b1_c2_d1.addText("");
+    let w_next_subject = a2_b1_c2_d1.addText("");
+    w_next_subject_text.lineLimit = w_next_subject.lineLimit = 1;
+    w_next_subject_text.font = normalFont;
+    w_next_subject.font = bigFont;
+    w_next_subject.textColor = bigColor;
+
+    //a2_b1_c2_d2_e1_text/design
+    let w_next_meet = a2_b1_c2_d2_e1.addText("");
+    w_next_meet.lineLimit = 1;
+    w_next_meet.font = urlFont;
+    w_next_meet.textColor = urlColor;
+
+    //a2_b1_c2_d2_e2_text/design
+    a2_b1_c2_d2_e2.addSpacer();
+    let w_next_classroom = a2_b1_c2_d2_e2.addText("");
+    w_next_classroom.lineLimit = 1;
+    w_next_classroom.font = urlFont;
+    w_next_classroom.textColor = urlColor;
+
+    //a2_b1_c3_d1_text/design
+    let w_next_teacher_text = a2_b1_c3_d1.addText("");
+    let w_next_room_text = a2_b1_c3_d1.addText("");
+    let w_next_time_text = a2_b1_c3_d1.addText("");
+
+    w_next_teacher_text.lineLimit = w_next_room_text.lineLimit = w_next_time_text.lineLimit = 1;
+    w_next_teacher_text.font = w_next_room_text.font = w_next_time_text.font = normalFont;
+
+    //a2_b1_c3_d2_text/design
+    let w_next_teacher = a2_b1_c3_d2.addText("");
+    let w_next_room = a2_b1_c3_d2.addText("");
+    let w_next_time = a2_b1_c3_d2.addText("");
+
+    w_next_teacher.lineLimit = w_next_room.lineLimit = w_next_time.lineLimit = 1;
+    w_next_teacher.font = w_next_room.font = w_next_time.font = normalFont;
+
+    //value set >>>>>
+    let currentMeet = currentSubject ? currentSubject.getMeetUrl() : null;
+    let currentClassromm = currentSubject ? currentSubject.getClassroomUrl() : null;
+    let nextSubject = currentSubjectDay.getSubject(currentPariod + 1);
+    let nextMeet = nextSubject ? nextSubject.getMeetUrl() : null;
+    let nextClassroom = nextSubject ? nextSubject.getClassroomUrl() : null;
+
+    w_classname.text = `ชื่อ ${ClassData.getClassName()}`;
+    w_period.text = `คาบที่ ${currentPariod + 1}`;
+    w_subject_text.text = `กำลังเรียนวิชา 📖`;
+    w_subject.text = currentSubject ? currentSubject.getLocaleName() : "NULL";
+    if (currentMeet) {
+        w_meet.text = "เข้าประชุม";
+        w_meet.url = currentMeet;
+    }
+    if (currentClassromm) {
+        w_classroom.text = "เข้าห้องเรียน";
+        w_classroom.url = currentClassromm;
+    }
+    w_teacher_text.text = w_next_teacher_text.text = "ผู้สอน";
+    w_room_text.text = w_next_room_text.text = "เรียนที่";
+    w_time_text.text = w_next_time_text.text = "เวลา";
+    w_teacher.text = currentSubject ? `: ${currentSubject.getLocaleTeacherName()}` : "ERROR:NULL";
+    w_room.text = currentSubject ? `: ${currentSubject.getLocaleRoomId()}` : "ERROR:NULL";
+    w_time.text = currentSubject ? `: ${currentSubject.getLocaleTime()}` : "ERROR:NULL";
+    w_next_teacher.text = nextSubject ? `: ${nextSubject.getLocaleTeacherName()}` : ":";
+    w_next_room.text = nextSubject ? `: ${nextSubject.getLocaleRoomId()}` : ":";
+    w_next_time.text = nextSubject ? `: ${nextSubject.getLocaleTime()}` : ":";
+    w_next_subject_text.text = "วิชาต่อไป ▶";
+    w_next_subject.text = nextSubject ? nextSubject.getLocaleName() : " ";
+    if (nextMeet) {
+        w_next_meet.text = "เข้าประชุม";
+        w_next_meet.url = nextMeet;
+    }
+    if (nextClassroom) {
+        w_next_classroom.text = "เข้าห้องเรียน";
+        w_next_classroom.url = nextClassroom;
+    }
+
+    return new Promise((resolve, reject) => {
+        resolve(widget);
+    });
+}
+
+/**
+ * สร้าง widget ขนาดเล็ก และค่าในแต่ละ layout
+ * @author Sittipat Tepsutar
+ * @returns {Promise<ListWidget>} Promise > ListWidget
+ * @param {ListWidget} widget widget.
+ * @param {Size} size size.
+ */
+async function createLargeWidget(hwid: ListWidget, size: Size): Promise<ListWidget> {
+
+    /*-------------------
+       Large widget >>>
+    ---------------------*/
+
+    //line
+    let lc = new Color("#FFFFFF", 0.5);
+
+
+    //Title , Chart
+    let title = hwid.addStack();
+    title.size = new Size(size.width * 1.1, size.height * 1.4 / 3);
+
+    let lw0 = hwid.addStack();
+    lw0.size = new Size(title.size.width, 0.5);
+    lw0.backgroundColor = lc;
+    let chart = hwid.addStack();
+
+    chart.size = new Size(size.width * 1.1, size.height * 2 / 3);
+    chart.layoutVertically();
+
+    title.backgroundColor = innerBackgroundColor;
+    title.cornerRadius = 10;
+
+
+    //Title 1,2
+    let title1 = title.addStack();
+    let lt12 = title.addStack();
+    let title2 = title.addStack();
+    title1.size = new Size(title.size.width / 2, title.size.height);
+    title2.size = title1.size;
+    title2.layoutVertically();
+
+    lt12.size = new Size(0.5, title.size.height);
+    lt12.backgroundColor = lc;
+
+
+    //Info , Time left
+    let info = title2.addStack();
+    info.size = new Size(title2.size.width, title2.size.height * 2.4 / 3);
+    let time = title2.addStack();
+    time.size = new Size(title2.size.width, title2.size.height * 0.6 / 3);
+
+
+    //Chart layout head,body
+    let head = chart.addStack();
+    head.size = new Size(chart.size.width, chart.size.height / 6);
+    head.layoutHorizontally();
+
+    let headline = chart.addStack();
+    headline.size = new Size(chart.size.width, 0.5);
+    headline.backgroundColor = lc;
+
+    let body = chart.addStack();
+
+    body.size = new Size(chart.size.width, chart.size.height * 5 / 6);
+    body.layoutHorizontally();
+
+    body.backgroundColor = innerBackgroundColor;
+    body.cornerRadius = 10;
+
+
+    //title1 layout  
+    let title10 = title1.addStack();
+    let t1l0 = title1.addStack();
+    let title11 = title1.addStack();
+
+    title1.layoutVertically();
+
+
+    //title1 layout size,design
+    title10.size = new Size(title1.size.width, title1.size.height * 1.9 / 3);
+    title11.size = new Size(title1.size.width, title1.size.height * 1.1 / 3);
+
+    title11.layoutVertically();
+    title10.layoutVertically();
+
+    title10.setPadding(0, 5, 0, 0);
+
+
+    //title11 layout
+    let title110 = title11.addStack();
+    let title111 = title11.addStack();
+
+    //title11 layout size,design 2.0
+    title110.size = new Size(title11.size.width, title11.size.height * 1 / 2);
+    title111.size = new Size(title11.size.width, title11.size.height * 1 / 2);
+
+    title110.layoutHorizontally();
+    title111.layoutHorizontally();
+
+    //title110,title111 layout <- title11 2.0
+    let title110_name = title110.addStack();
+    let title111_name = title111.addStack();
+    let title110_value = title110.addStack();
+    let title111_value = title111.addStack();
+
+    title110_name.layoutVertically();
+    title111_name.layoutVertically();
+    title110_value.layoutVertically();
+    title111_value.layoutVertically();
+
+    //title110 name,value design
+    title110_name.size = new Size(title110.size.width * 0.6 / 2, title110.size.height);
+    title110_value.size = new Size(title110.size.width * 1.4 / 2, title110.size.height);
+
+    title110_name.setPadding(0, 5, 0, 0);
+    title110_value.setPadding(0, 0, 0, 1);
+
+    //title111 name,value design
+    title111_name.size = new Size(title110_name.size.width, title111.size.height);
+    title111_value.size = new Size(title110_value.size.width, title111.size.height);
+
+    title111_name.setPadding(0, 5, 0, 0);
+    title111_value.setPadding(0, 0, 0, 1);
+
+    //head layout
+    let h0 = head.addStack();
+
+    let lh01 = head.addStack();
+
+    let h1 = head.addStack();
+    let h2 = head.addStack();
+
+    h0.size = new Size(head.size.width * 0.2, head.size.height);
+
+    h1.size = new Size(head.size.width * 0.4, head.size.height);
+
+    h2.size = new Size(head.size.width * 0.4, head.size.height);
+
+    lh01.size = new Size(0.5, head.size.height);
+    lh01.borderWidth = 0.5;
+    lh01.borderColor = lc;
+
+
+    //body layout
+    let b0 = body.addStack();
+    let b1 = body.addStack();
+    let b2 = body.addStack();
+
+    b0.size = new Size(body.size.width * 0.2, body.size.height);
+
+    b1.size = new Size(body.size.width * 0.5, body.size.height);
+
+    b2.size = new Size(body.size.width * 0.3, body.size.height);
+    b0.layoutVertically();
+    b1.layoutVertically();
+    b2.layoutVertically();
+
+
+    //info layout
+    info.layoutVertically();
+    let cname = info.addStack();
+    cname.size = new Size(info.size.width, info.size.height * 7.5 / 25);
+
+    let hello = info.addStack();
+    hello.size = new Size(info.size.width, info.size.height * 7.5 / 25)
+    hello.centerAlignContent();
+
+    let day = info.addStack();
+    day.size = new Size(info.size.width, info.size.height * 10 / 25);
+    day.centerAlignContent();
+
+
+    //present font,color
+    let pf = new Font("Arial", 12);
+    let pc = new Color("#FFFF00", 1);
+
+    //font
+    let f = new Font("Arial", 12)
+
+    //b0 layout , value set
+    for (let i = 0; i <= 3; i++) {
+        let ci = i;
+        if (currentPariod == -1) {
+            ci++;
+        }
+        let ch = currentPariod + ci;
+        let b0i = b0.addStack();
+        b0i.centerAlignContent();
+        b0i.size = new Size(b0.size.width, b0.size.height / 4);
+        let t: WidgetText;
+        if (currentSubjectDay.getSubject(ch - 1)) {
+            t = b0i.addText(ch.toString());
+        } else {
+            t = b0i.addText("");
+        }
+        if (currentPariod + 1 == ch) {
+            t.font = pf;
+            t.textColor = pc;
+        } else {
+            t.font = f;
+        }
+    }
+
+    //b1 layout , value set
+    for (let i = 0; i <= 3; i++) {
+        let ci = i;
+        if (currentPariod == -1) {
+            ci++;
+        }
+        let ch = currentPariod + ci;
+        let bi = b1.addStack();
+        bi.centerAlignContent();
+        bi.size = new Size(b1.size.width, b1.size.height / 4);
+        let t: WidgetText;
+        let s = currentSubjectDay.getSubject(ch - 1);
+        t = bi.addText(s ? s.getLocaleName() : "");
+
+        if (currentPariod + 1 == ch) {
+            t.font = pf;
+            t.textColor = pc;
+        } else {
+            t.font = f;
+        }
+        t.lineLimit = 1;
+        bi.addSpacer();
+    }
+
+    //b2 layout , value set
+    for (let i = 0; i <= 3; i++) {
+        let ci = i;
+        if (currentPariod == -1) {
+            ci++;
+        }
+        let ch = currentPariod + ci;
+        let bi = b2.addStack();
+        bi.centerAlignContent();
+        bi.size = new Size(b2.size.width, b2.size.height / 4);
+        let t: WidgetText;
+        let s = currentSubjectDay.getSubject(ch - 1);
+        t = bi.addText(s ? s.getLocaleTime() : "");
+
+        bi.addSpacer();
+        if (currentPariod + 1 == ch) {
+            t.font = pf;
+            t.textColor = pc;
+        } else {
+            t.font = f;
+        }
+        t.lineLimit = 1;
+    }
+
+    //head value set : h0-2
+    h0.centerAlignContent();
+    h1.centerAlignContent();
+    h2.centerAlignContent();
+
+    h0.addText("คาบ").font = f;
+    h1.addSpacer(12);
+    h1.addText("วิชา").font = f;
+    h2.addText("เวลา").font = f;
+
+    h1.addSpacer();
+
+    //title1... value set
+    let ct = title10.addText("คาบที่ " + (currentPariod + 1).toString());
+    ct.font = new Font("Arial", 10);
+    ct.lineLimit = 1;
+
+    let t1T0 = title10.addText("กำลังเรียนวิชา 📖");
+    t1T0.font = new Font("default", 15);
+    t1T0.textColor = new Color("#FFFFAA", 1)
+
+    let s = title10.addText(currentSubject ? currentSubject.getLocaleName() : "NULL");
+
+    s.font = Font.boldSystemFont(18);
+    s.textColor = Color.dynamic(new Color("#3333FF", 1), new Color("#BBBBFF", 1));
+    s.lineLimit = 1;
+
+    t1l0.size = new Size(title10.size.width, 0.5);
+    t1l0.backgroundColor = lc;
+
+    title110_name.addSpacer();
+    title110_value.addSpacer();
+
+    {
+        let ct1 = title110_name.addText("เรียนที่");
+        ct1.font = new Font("default", 12);
+        ct1.lineLimit = 1;
+
+        let ct2 = title111_name.addText("ผู้กำกับ");
+        ct2.font = new Font("default", 12);
+        ct2.lineLimit = 1;
+        title111_name.addSpacer();
+    }
+    {
+        let this_font: Font = new Font("default", 12);
+        let ct1: WidgetText;
+        ct1 = title110_value.addText(currentSubject?.getRoomId() ? `: ${currentSubject.getRoomId()}` : `: `);
+        ct1.font = this_font;
+        ct1.lineLimit = 1;
+
+        let ct2: WidgetText;
+        ct2 = title111_value.addText(currentSubject?.getTeacher() ? `: ${currentSubject.getLocaleTeacherName()}` : `: `);
+        ct2.font = this_font;
+        ct2.lineLimit = 1;
+        title111_value.addSpacer();
+    }
+
+    //info value set
+    cname.centerAlignContent();
+    let cnameT = cname.addText("⚠️ตามตารางเรียนของ " + ClassData.getClassName());
+    cnameT.font = new Font("default", 10);
+    cnameT.centerAlignText();
+
+
+    //hello value
+    hello.layoutHorizontally();
+    hello.bottomAlignContent();
+    let helloT = hello.addText(getWelcome(currentMinutes)); {
+        let font = Font.boldSystemFont(16);
+        helloT.font = font;
+        helloT.lineLimit = 1;
+        helloT.minimumScaleFactor = 0.2;
+    }
+
+
+    // day value
+    let dayT = day.addDate(currentDate); {
+        let font = Font.boldSystemFont(16);
+        dayT.font = font;
+        dayT.centerAlignText();
+        dayT.lineLimit = 1;
+        dayT.minimumScaleFactor = 0.2;
+        day.layoutHorizontally();
+        day.topAlignContent();
+    }
+
+    let timeT = time.addText(getSplashText());
+    timeT.font = new Font("Arial", 14);
+    time.centerAlignContent();
+    timeT.textColor = new Color("FFFF00", 1);
+
+    //complete
     return new Promise((resolve, reject) => {
         hwid ? resolve(hwid) : reject(null);
     });
