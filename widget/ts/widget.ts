@@ -1010,9 +1010,9 @@ async function createMediumWidget(widget: ListWidget, size: Size): Promise<ListW
        Medium widget >>>
     ---------------------*/
     let lcolor = new Color("#FFFFFF", 0.5);
-    let urlFont = Font.thinSystemFont(12);
+    let urlFont = Font.thinSystemFont(10);
     let urlColor = new Color("#B0FFFF", 1);
-    let normalFont = Font.systemFont(12);
+    let normalFont = Font.systemFont(10);
     let bigFont = Font.boldRoundedSystemFont(18);;
     let bigColor = new Color("#30CFFF", 1);
 
@@ -1277,6 +1277,7 @@ async function createMediumWidget(widget: ListWidget, size: Size): Promise<ListW
     w_subject_text.lineLimit = w_subject.lineLimit = 1;
 
     w_subject_text.font = normalFont;
+    w_subject_text.textColor = new Color("#0004FF", 1);
     w_subject.font = bigFont;
     w_subject.textColor = bigColor;
 
@@ -1322,6 +1323,7 @@ async function createMediumWidget(widget: ListWidget, size: Size): Promise<ListW
     let w_next_subject = a2_b1_c2_d1.addText("");
     w_next_subject_text.lineLimit = w_next_subject.lineLimit = 1;
     w_next_subject_text.font = normalFont;
+    w_next_subject_text.textColor = new Color("#0004FF", 1);
     w_next_subject.font = bigFont;
     w_next_subject.textColor = bigColor;
 
