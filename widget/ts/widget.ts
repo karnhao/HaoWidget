@@ -127,11 +127,7 @@ class Subject {
      * @param {String} name ชื่อวิชา.
      */
     public setName(name: string): void {
-        if (typeof name == "string") {
-            this.name = name;
-            return;
-        }
-        throw new TypeError("Parameter ต้องเป็น string.");
+        this.name = name;
     }
     /**
      * 

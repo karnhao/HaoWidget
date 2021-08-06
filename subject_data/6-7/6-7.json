@@ -28,7 +28,9 @@
                         "ครูอักษราภัค สิทธิพรรัตนมณี"
                     ],
                     "roomId": "126",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "อ33101",
@@ -37,7 +39,9 @@
                         "ครูศรานตา กฤษฎาสิมะ"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "ก33901",
@@ -46,7 +50,9 @@
                         "ครูสุพัตรา อินทร์ศร"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "ค33201",
@@ -55,14 +61,18 @@
                         "ครูวรางค์ สุจริต"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"https://classroom.google.com/c/MzQ3MTYwMTM3NzA1",
+                    "meet":"https://meet.google.com/lookup/bgw7zdy4dm"
                 },
                 {
                     "id": null,
                     "name": "🍖พักกลางวัน",
                     "teacher": null,
                     "roomId": null,
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "อ33205",
@@ -71,7 +81,9 @@
                         "ครูนิรชา สุวรรณมณี"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "ท33101",
@@ -80,7 +92,9 @@
                         "ครูธณฐัฐา สว่างรักษ์"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 }
             ]
         },
@@ -95,7 +109,9 @@
                         "ครูวีนัฐดา แก้วโท"
                     ],
                     "roomId": "611",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "พ30205",
@@ -104,7 +120,9 @@
                         "ครูเฉลิมศรี เกตุจำปา"
                     ],
                     "roomId": "โดม2",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "ศ33103",
@@ -113,7 +131,9 @@
                         "ครูณัฐพล มั่นเรือง"
                     ],
                     "roomId": "217",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "อ33205",
@@ -122,14 +142,18 @@
                         "Mr. Jomer Fonclara Piang"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": null,
                     "name": "🍖พักกลางวัน",
                     "teacher": null,
                     "roomId": null,
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "ค33209",
@@ -138,7 +162,9 @@
                         "ครูณัทธมวันทน์ ภู่สุนทรเกียรติ"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "อ33205",
@@ -147,7 +173,9 @@
                         "ครูนิรชา สุวรรณมณี"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 }
             ]
         },
@@ -162,7 +190,9 @@
                         "ครูวนัสนันท์ คําแสน"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"https://classroom.google.com/c/MzE4NjM1NjE4Mzg3",
+                    "meet":"https://meet.google.com/lookup/h772fmgxvv"
                 },
                 {
                     "id": "ส33101",
@@ -171,7 +201,9 @@
                         "ครูธเนศ วิริยะมนตรี"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "พ33101",
@@ -180,7 +212,9 @@
                         "ครูทิพรวี เตชะหงษา"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "ค33201",
@@ -189,14 +223,18 @@
                         "ครูวรางค์ สุจริต"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"https://classroom.google.com/c/MzQ3MTYwMTM3NzA1",
+                    "meet":"https://meet.google.com/lookup/bgw7zdy4dm"
                 },
                 {
                     "id": null,
                     "name": "🍖พักกลางวัน",
                     "teacher": null,
                     "roomId": null,
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "อ33203",
@@ -205,7 +243,9 @@
                         "ครูพรประภา ชัยนา"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"https://classroom.google.com/c/MzQzMjI3Mjk2OTgw",
+                    "meet":"https://meet.google.com/lookup/g4cc2ebw54"
                 },
                 {
                     "id": "ค33209",
@@ -214,7 +254,9 @@
                         "ครูณัทธมวันทน์ ภู่สุนทรเกียรติ"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 }
             ]
         },
@@ -227,7 +269,9 @@
                     "name": "👩‍🏫พบที่ปรึกษา",
                     "teacher": null,
                     "roomId": null,
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "ส33101",
@@ -236,7 +280,9 @@
                         "ครูธเนศ วิริยะมนตรี"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "ว33191",
@@ -245,7 +291,9 @@
                         "ครูพรสุริยุ วงศ์ใหญ่"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "ว33191",
@@ -254,14 +302,18 @@
                         "ครูพรสุริยุ วงศ์ใหญ่"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": null,
                     "name": "🍖พักกลางวัน",
                     "teacher": null,
                     "roomId": null,
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "ท33101",
@@ -270,21 +322,27 @@
                         "ครูธณฐัฐา สว่างรักษ์"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": null,
                     "name": "🎌เลือกเสรี",
                     "teacher": null,
                     "roomId": null,
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": null,
                     "name": "🎌เลือกเสรี",
                     "teacher": null,
                     "roomId": null,
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 }
             ]
         },
@@ -299,7 +357,9 @@
                         "ครูศรานตา กฤษฎาสิมะ"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": "ค33201",
@@ -308,7 +368,9 @@
                         "ครูวรางค์ สุจริต"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"https://classroom.google.com/c/MzQ3MTYwMTM3NzA1",
+                    "meet":"https://meet.google.com/lookup/bgw7zdy4dm"
                 },
                 {
                     "id": null,
@@ -317,7 +379,9 @@
                         "Teacher Niracha"
                     ],
                     "roomId": null,
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": null,
@@ -344,7 +408,9 @@
                         "ครูธันย์ชนก อรัญญิก"
                     ],
                     "roomId": null,
-                    "width": 50
+                    "width": 50,
+                    "classroom":"",
+                    "meet":""
                 },
                 {
                     "id": null,
@@ -360,7 +426,9 @@
                         "ครูพรประภา ชัยนา"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"https://classroom.google.com/c/MzQzMjI3Mjk2OTgw",
+                    "meet":"https://meet.google.com/lookup/g4cc2ebw54"
                 },
                 {
                     "id": "33217",
@@ -369,7 +437,9 @@
                         "ครูวนัสนันท์ คําแสน"
                     ],
                     "roomId": "944",
-                    "width": 50
+                    "width": 50,
+                    "classroom":"https://classroom.google.com/c/MzE4NjM1NjE4Mzg3",
+                    "meet":"https://meet.google.com/lookup/h772fmgxvv"
                 }
             ]
         },
