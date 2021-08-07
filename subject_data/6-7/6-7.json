@@ -29,8 +29,8 @@
                     ],
                     "roomId": "126",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "อ33101",
@@ -40,8 +40,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "ก33901",
@@ -51,8 +51,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "ค33201",
@@ -62,8 +62,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"https://classroom.google.com/c/MzQ3MTYwMTM3NzA1",
-                    "meet":"https://meet.google.com/lookup/bgw7zdy4dm"
+                    "classroom": "https://classroom.google.com/c/MzQ3MTYwMTM3NzA1",
+                    "meet": "https://meet.google.com/lookup/bgw7zdy4dm"
                 },
                 {
                     "id": null,
@@ -71,8 +71,8 @@
                     "teacher": null,
                     "roomId": null,
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "อ33205",
@@ -82,8 +82,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "ท33101",
@@ -93,8 +93,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 }
             ]
         },
@@ -110,8 +110,8 @@
                     ],
                     "roomId": "611",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "พ30205",
@@ -121,8 +121,8 @@
                     ],
                     "roomId": "โดม2",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "ศ33103",
@@ -132,8 +132,8 @@
                     ],
                     "roomId": "217",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "อ33205",
@@ -143,8 +143,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": null,
@@ -152,8 +152,8 @@
                     "teacher": null,
                     "roomId": null,
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "ค33209",
@@ -163,8 +163,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "อ33205",
@@ -174,8 +174,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 }
             ]
         },
@@ -191,8 +191,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"https://classroom.google.com/c/MzE4NjM1NjE4Mzg3",
-                    "meet":"https://meet.google.com/lookup/h772fmgxvv"
+                    "classroom": "https://classroom.google.com/c/MzE4NjM1NjE4Mzg3",
+                    "meet": "https://meet.google.com/lookup/h772fmgxvv"
                 },
                 {
                     "id": "ส33101",
@@ -202,8 +202,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "พ33101",
@@ -213,8 +213,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "ค33201",
@@ -224,8 +224,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"https://classroom.google.com/c/MzQ3MTYwMTM3NzA1",
-                    "meet":"https://meet.google.com/lookup/bgw7zdy4dm"
+                    "classroom": "https://classroom.google.com/c/MzQ3MTYwMTM3NzA1",
+                    "meet": "https://meet.google.com/lookup/bgw7zdy4dm"
                 },
                 {
                     "id": null,
@@ -233,8 +233,8 @@
                     "teacher": null,
                     "roomId": null,
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "อ33203",
@@ -244,8 +244,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"https://classroom.google.com/c/MzQzMjI3Mjk2OTgw",
-                    "meet":"https://meet.google.com/lookup/g4cc2ebw54"
+                    "classroom": "https://classroom.google.com/c/MzQzMjI3Mjk2OTgw",
+                    "meet": "https://meet.google.com/lookup/g4cc2ebw54"
                 },
                 {
                     "id": "ค33209",
@@ -255,8 +255,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 }
             ]
         },
@@ -270,8 +270,8 @@
                     "teacher": null,
                     "roomId": null,
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "ส33101",
@@ -281,8 +281,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "ว33191",
@@ -292,8 +292,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "ว33191",
@@ -303,8 +303,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": null,
@@ -312,8 +312,8 @@
                     "teacher": null,
                     "roomId": null,
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "ท33101",
@@ -323,8 +323,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": null,
@@ -332,8 +332,8 @@
                     "teacher": null,
                     "roomId": null,
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": null,
@@ -341,8 +341,8 @@
                     "teacher": null,
                     "roomId": null,
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 }
             ]
         },
@@ -358,8 +358,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": ""
                 },
                 {
                     "id": "ค33201",
@@ -369,8 +369,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"https://classroom.google.com/c/MzQ3MTYwMTM3NzA1",
-                    "meet":"https://meet.google.com/lookup/bgw7zdy4dm"
+                    "classroom": "https://classroom.google.com/c/MzQ3MTYwMTM3NzA1",
+                    "meet": "https://meet.google.com/lookup/bgw7zdy4dm"
                 },
                 {
                     "id": null,
@@ -380,8 +380,8 @@
                     ],
                     "roomId": null,
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": null
                 },
                 {
                     "id": null,
@@ -409,8 +409,8 @@
                     ],
                     "roomId": null,
                     "width": 50,
-                    "classroom":"",
-                    "meet":""
+                    "classroom": "",
+                    "meet": null
                 },
                 {
                     "id": null,
@@ -427,8 +427,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"https://classroom.google.com/c/MzQzMjI3Mjk2OTgw",
-                    "meet":"https://meet.google.com/lookup/g4cc2ebw54"
+                    "classroom": "https://classroom.google.com/c/MzQzMjI3Mjk2OTgw",
+                    "meet": "https://meet.google.com/lookup/g4cc2ebw54"
                 },
                 {
                     "id": "33217",
@@ -438,8 +438,8 @@
                     ],
                     "roomId": "944",
                     "width": 50,
-                    "classroom":"https://classroom.google.com/c/MzE4NjM1NjE4Mzg3",
-                    "meet":"https://meet.google.com/lookup/h772fmgxvv"
+                    "classroom": "https://classroom.google.com/c/MzE4NjM1NjE4Mzg3",
+                    "meet": "https://meet.google.com/lookup/h772fmgxvv"
                 }
             ]
         },

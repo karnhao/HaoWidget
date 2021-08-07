@@ -30,7 +30,7 @@
                     "roomId": "947",
                     "width": 50,
                     "classroom": "https://classroom.google.com/c/MzQ2OTc4NTIxNzA0",
-                    "meet": "https://classroom.google.com/c/MzQ2OTc4NTIxNzA0"
+                    "meet": null
                 },
                 {
                     "id": "ส33101",
@@ -413,7 +413,7 @@
                     "roomId": null,
                     "width": 50,
                     "classroom": "https://classroom.google.com/c/MzU5ODMxMDA4NjI4",
-                    "meet": "https://classroom.google.com/c/MzU5ODMxMDA4NjI4"
+                    "meet": null
                 },
                 {
                     "id": null,
@@ -442,7 +442,7 @@
                     "roomId": null,
                     "width": 50,
                     "classroom": "https://classroom.google.com/c/MzU5ODMxMDA4NjI4",
-                    "meet": "https://classroom.google.com/c/MzU5ODMxMDA4NjI4"
+                    "meet": null
                 },
                 {
                     "id": null,
