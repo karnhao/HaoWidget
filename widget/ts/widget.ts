@@ -696,7 +696,7 @@ async function main_widget(): Promise<ListWidget> {
         try {
             widget = await rw(false);
         } catch (e) {
-            throw new Error(e);
+            throw new Error('Something wrong!');
         }
     }
     return new Promise((resolve, reject) => {
@@ -1862,7 +1862,7 @@ async function getRandomBackgroundImage(forceUrl?: string): Promise<Image | null
             img = await req.loadImage();
             break;
         } catch (error) {
-            errorInfo += `Skip ${t} : ${error.message}\n`;
+            errorInfo += `Skip ${t} : an error occurred\n`;
         }
     }
 
