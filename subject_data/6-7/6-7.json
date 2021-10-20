@@ -4,15 +4,5 @@
     "nullSubject": {
         "name": "❌ไม่มี"
     },
-    "subjectList": {
-        "_3": {
-            "startTime": 840,
-            "subjectList": [
-                {
-                    "name": "💉ฉีดวัคซีน",
-                    "width": 60
-                }
-            ]
-        }
-    }
+    "subjectList": {}
 }
