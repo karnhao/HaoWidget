@@ -51,8 +51,11 @@ const allow_replace = true; /* ถ้า true ระบบจะโหลดไ�
 // code >>
 var widgetFamily = config.widgetFamily;
 Notification.removeAllPending();
+const widgetBuilder = {
+    small: {}
+};
 // load/save file.
-async function loadData() {
+async function loadData(url = data_url) {
     let fm = FileManager.local();
     let path = null;
     let raw_json = null;
@@ -70,7 +73,7 @@ async function loadData() {
         await n.schedule();
     }
     if (config.runsInWidget || args.shortcutParameter) {
-        let request = new Request(data_url);
+        let request = new Request(url);
         try {
             if (!allow_replace && path && fm.fileExists(path)) {
                 throw new Error("ไฟล์ข้อมูลมีอยู่แล้ว. สิทธิ allow_replace ถูกปฏิเสธ.");
@@ -93,92 +96,89 @@ async function loadData() {
         resolve(raw_json);
     });
 }
+const dayMinutes = 1439;
 class Subject {
     width = 0;
     startTime = 0;
     period = -1;
-    name = "";
-    id = "";
-    roomId = "";
-    teacher = [];
+    name = null;
+    id = null;
+    roomId = null;
+    teacher = null;
     classroom = null;
     meet = null;
     constructor(name) {
-        if (name) {
+        if (name)
             this.name = name;
-        }
     }
     /**
-     *
-     * @param {String} id รหัสวิชา.
+     * ตั้ง id.
+     * @param {string} id รหัสวิชา.
      */
     setId(id) {
         this.id = id;
     }
     /**
-     *
-     * @param {String} name ชื่อวิชา.
+     * ตั้งชื่อวิชา.
+     * @param {string} name ชื่อวิชา.
      */
     setName(name) {
-        if (typeof name == "string") {
-            this.name = name;
-            return;
-        }
-        throw new TypeError("Parameter ต้องเป็น string.");
+        if (typeof name != "string")
+            throw new TypeError("Parameter ต้องเป็น string. : " + name);
+        this.name = name;
     }
     /**
      *
-     * @param  {String[]} teacher รายชื่อครูประจำวิชา (array).
+     * @param  {string[]} teacher รายชื่อครูประจำวิชา (array).
      */
     setTeacher(teacher) {
         this.teacher = teacher;
     }
     /**
      *
-     * @param {String} roomId ชื่อห้องเรียนหรือรหัสห้องเรียน.
+     * @param {string} roomId ชื่อห้องเรียนหรือรหัสห้องเรียน.
      */
     setRoomId(roomId) {
         this.roomId = roomId;
     }
     /**
      *
-     * @param {Number} number ระยะเวลาเรียน หน่วยเป็นนาที.
+     * @param {number} number ระยะเวลาเรียน หน่วยเป็นนาที.
      */
     setWidth(number) {
         this.width = number;
     }
     /**
-     * @param {Number} number หมายเลขคาบในวิชา.
+     * @param {number} number หมายเลขคาบในวิชา.
      */
     setPeriod(number) {
         if (!Number.isInteger(number) && number)
             throw new TypeError(`Parameter ต้องเป็นตัวเลขที่เป็นจำนวนเต็มเท่านั้น. : ${number}`);
-        else
-            this.period = number;
+        this.period = number;
     }
     /**
-     * @param {Number} time เวลาในหน่วยนาที นับตั้งแต่ 0:00น.
+     * @param {number} time เวลาในหน่วยนาที นับตั้งแต่ 0:00น.
      */
     setStartTime(time) {
         this.startTime = time;
     }
     /**
      *
-     * @param url url ห้องเรียน
+     * @param {string} url url ห้องเรียน
      */
     setClassroomUrl(url) {
         this.classroom = url;
     }
     /**
      *
-     * @param url url เข้าห้องประชุม
+     * @param {string} url url เข้าห้องประชุม
      */
     setMeetUrl(url) {
         this.meet = url;
     }
     /**
      *
-     * @returns {String} รหัสวิชา
+     * @returns {string} รหัสวิชา
      */
     getId() {
         return this.id;
@@ -188,7 +188,7 @@ class Subject {
     }
     /**
      *
-     * @returns {String} รหัสวิชาในรูปแบบที่ให้ ai อ่าน.
+     * @returns {string} รหัสวิชาในรูปแบบที่ให้ ai อ่าน.
      */
     getLocaleSpeakId() {
         return this.id ? ((inp) => {
@@ -201,14 +201,14 @@ class Subject {
     }
     /**
      *
-     * @returns {String} ชื่อวิชา
+     * @returns {string} ชื่อวิชา
      */
     getName() {
         return this.name;
     }
     /**
      *
-     * @returns {String} ชื่อวิชา
+     * @returns {string} ชื่อวิชา
      */
     getLocaleName() {
         return this.name ? this.name : "";
@@ -243,7 +243,7 @@ class Subject {
     }
     /**
      *
-     * @returns {String}
+     * @returns {string}
      */
     getLocaleRoomId() {
         let ins = this.getRoomId();
@@ -257,52 +257,47 @@ class Subject {
     }
     /**
      *
-     * @returns ระยะเวลาเรียน หน่วยเป็นนาที.
+     * @returns {number} ระยะเวลาเรียน หน่วยเป็นนาที.
      */
     getWidth() {
         return this.width;
     }
     /**
      *
-     * @returns หมายเลขคาบในวิชา.
+     * @returns {number} หมายเลขคาบในวิชา.
      */
     getPeriod() {
         return this.period;
     }
     getLocalePeriod() {
-        let out = this.getPeriod();
-        if (typeof (out) === 'number') {
-            out++;
-            return out.toString();
-        }
-        return "NULL";
+        return this.period != null ? (this.period + 1).toString() : "";
     }
     /**
      *
-     * @returns เวลาเมื่อเริ่มต้นคาบเรียนในรูปแบบนาทีที่นับตั้งแต่ 0:00น.
+     * @returns {number} เวลาเมื่อเริ่มต้นคาบเรียนในรูปแบบนาทีที่นับตั้งแต่ 0:00น.
      */
     getStartTime() {
         return this.startTime;
     }
     getLocaleStartTime() {
-        return getLocalTimeStringFromMinute(this.getStartTime());
+        return getLocaleTimeStringFromMinute(this.getStartTime());
     }
     /**
      *
-     * @returns {Number} เวลาเมื่อจบคาบเรียนในรูปแบบนาทีที่นับตั้งแต่ 0:00น.
+     * @returns {number} เวลาเมื่อจบคาบเรียนในรูปแบบนาทีที่นับตั้งแต่ 0:00น.
      */
     getEndTime() {
         return this.startTime + this.width;
     }
     getLocaleEndTime() {
-        return getLocalTimeStringFromMinute(this.getEndTime());
+        return getLocaleTimeStringFromMinute(this.getEndTime());
     }
     getLocaleTime() {
         return `${this.getLocaleStartTime()}-${this.getLocaleEndTime()}`;
     }
     /**
      * ส่งกลับข้อความที่เป็นภาษามนุษย์
-     * @returns {String} ข้อความที่มนุษย์อ่านได้
+     * @returns {string} ข้อความที่มนุษย์อ่านได้
      */
     getLocaleString() {
         return ` คาบที่ ${this.getLocalePeriod()} ของวัน.\n เรียนวิชา : ${this.getName()}.\n รหัส : ${this.getLocaleId()}\n`
@@ -312,7 +307,7 @@ class Subject {
     }
     /**
      * ส่งกลับข้อความสำหรับให้ ai อ่าน.
-     * @returns {String} ข้อความที่มนุษย์อ่านได้.
+     * @returns {string} ข้อความที่มนุษย์อ่านได้.
      */
     getLocaleSpeakString() {
         return ` คาบที่ ${this.getLocalePeriod()} ของวัน.\n ` + (this.name ? `เรียนวิชา : ${this.getName()}.\n` : '') + (this.id ? ` รหัส : ${this.getLocaleSpeakId()}\n` : '')
@@ -326,108 +321,146 @@ class Subject {
     getMeetUrl() {
         return this.meet;
     }
-    goClassroom() {
-        if (!this.classroom)
-            throw new Error("ไม่มีข้อมูล.");
-        Safari.open(this.classroom);
-    }
-    goMeet() {
-        if (!this.meet)
-            throw new Error("ไม่มีข้อมูล.");
-        Safari.open(this.meet);
+    getStartTimeDate() {
+        return getDateFromMinute(this.getStartTime());
     }
 }
 class ClassData {
-    static data = {
+    currentDate = new Date();
+    currentDay = this.currentDate.getDay();
+    /**
+     * _เวลาที่เป็นหน่วยนาทีตั้งแต่ 0:00น ถึงปัจจุบัน._
+     */
+    currentMinutes = 0;
+    currentSubjectDay = new SubjectDay(0);
+    currentPariod = -1;
+    currentSubject = new Subject();
+    /**
+    *
+    * @param {RawClassData} data
+    * @param {Boolean} showMessage false is default.
+    */
+    update(showMessage = false, data = this.oldRawData) {
+        this.currentDate = new Date();
+        this.currentDay = this.currentDate.getDay();
+        // SET DATA
+        this.setData(data, showMessage);
+        // SET GLOBAL
+        this.currentMinutes = getTimeMinute(this.currentDate);
+        this.currentSubjectDay = this.get(this.currentDay);
+        this.currentPariod = this.currentSubjectDay.getPeriodByTime(this.currentMinutes);
+        this.currentSubject = this.currentSubjectDay.getSubject(this.currentPariod);
+    }
+    oldRawData = null;
+    data = {
         startTime: 0,
         classId: '',
         className: '',
         nullSubject: new Subject()
     };
-    static get(day) {
-        if (typeof (day) === 'number') {
-            return SubjectDay.get(day);
+    sd = (function () {
+        let out = [];
+        for (let i = 0; i < 7; i++) {
+            out.push(new SubjectDay(i));
         }
-        return SubjectDay.get();
+        return out;
+    })();
+    get(day) {
+        return day != null ? this.sd[Math.floor(day)] : this.sd;
+    }
+    /**
+     * อัพเดตเวลาแต่ละคาบของทุกวัน.
+     */
+    updateAllDay() {
+        this.sd.forEach((t) => {
+            t.update();
+        });
     }
     /**
      * สามารถโหลดหรือดูตัวอย่างข้อมูลดิบที่จะนำมาใส่ใน parameter ของฟังก์ชันนี้ได้ที่.
      *  - https://raw.githubusercontent.com/karnhao/HaoWidget/main/subject_data/6-10/6-10.json
-     * @param {any} json ข้อมูลดิบ.
+     * @param {RawClassData} object ข้อมูลดิบ.
+     * @param {boolean} showMessage
      */
-    static setData(json) {
-        this.setStartTime(json.startTime);
-        this.setClassId(json.classId);
-        this.setClassName(json.className);
+    setData(object, showMessage = false) {
+        this.setClassId(object.classId);
+        this.setClassName(object.className);
         this.setNullSubject((function (data) {
             let s = new Subject();
-            let raw_s = data?.nullSubject;
-            s.setId(raw_s?.id);
+            let raw_s = data?.nullSubject ?? { name: "NULL" };
+            s.setId(raw_s?.id ?? null);
             s.setName(raw_s?.name);
             s.setPeriod(null);
-            s.setRoomId(raw_s?.roomId);
+            s.setRoomId(raw_s?.roomId ?? null);
             s.setStartTime(0);
-            s.setTeacher(raw_s?.teacher);
-            s.setWidth(raw_s?.width);
-            s.setClassroomUrl(raw_s?.classroom);
-            s.setMeetUrl(raw_s?.meet);
+            s.setTeacher(raw_s?.teacher ?? null);
+            s.setWidth(raw_s?.width ?? 0);
+            s.setClassroomUrl(raw_s?.classroom ?? null);
+            s.setMeetUrl(raw_s?.meet ?? null);
             return s;
-        })(json));
+        })(object));
         // set Data from subjectList.
         // loop day 0 to 6.
+        showMessage && console.log("Storing subject to memory...");
         for (let i = 0; i < 7; i++) {
+            this.get(i).setNullSubject(this.getNullSubject());
             let f = new Function('data', `return data.subjectList._${i};`);
-            let sl = f(json);
+            let sl = f(object);
             sl?.startTime && this.get(i).setStartTime(sl?.startTime);
-            if (Array.isArray(sl.subjectList)) {
-                let s = [];
-                let k = 0;
-                // loop subject in subjectList.
-                for (let j of sl.subjectList) {
-                    let raw_object = j;
-                    let si = new Subject();
-                    si.setName(raw_object?.name);
-                    si.setId(raw_object?.id);
-                    si.setPeriod(k);
-                    si.setRoomId(raw_object?.roomId);
-                    si.setTeacher(raw_object?.teacher);
-                    si.setWidth(raw_object?.width);
-                    si.setClassroomUrl(raw_object?.classroom);
-                    si.setMeetUrl(raw_object.meet);
-                    s.push(si);
-                    k++;
-                }
-                this.get(i).setSubject(s);
+            if (!Array.isArray(sl?.subjectList) || sl?.subjectList.length == 0) {
+                this.get(i).clearSubject();
+                continue;
             }
+            showMessage && console.log(`#===============[Day ${i}]================#`);
+            let s = [];
+            let k = 0;
+            // loop subject in subjectList.
+            for (let j of sl.subjectList) {
+                let raw_object = j;
+                let si = new Subject();
+                si.setName(raw_object?.name);
+                si.setId(raw_object?.id ?? null);
+                si.setPeriod(k);
+                si.setRoomId(raw_object?.roomId ?? null);
+                si.setTeacher(raw_object?.teacher ?? null);
+                si.setWidth(raw_object?.width ?? 0);
+                si.setClassroomUrl(raw_object?.classroom ?? null);
+                si.setMeetUrl(raw_object.meet ?? null);
+                s.push(si);
+                k++;
+                showMessage && console.log(`>> Stored ${i} ${k} ${si.getLocaleId()} ${si.getLocaleName()}`);
+            }
+            this.get(i).setSubject(s);
+            showMessage && console.log("#======================================#\n");
         }
-        // SubjectDay.update();
+        this.oldRawData = object;
     }
     /**
-     *
-     * @param {Number} number เวลาเริ่มต้นคาบแรก นับตั้งแต่จุดเริ่มต้นของวัน (0:00น) หน่วยเป็นนาที.
+     * @deprecated
+     * @param {number} number เวลาเริ่มต้นคาบแรก นับตั้งแต่จุดเริ่มต้นของวัน (0:00น) หน่วยเป็นนาที.
      */
-    static setStartTime(number) {
+    setStartTime(number) {
         this.data.startTime = number;
     }
     /**
      *
-     * @param {any} id id ห้องเรียน.
+     * @param {string} id id ห้องเรียน.
      */
-    static setClassId(id) {
+    setClassId(id) {
         this.data.classId = id;
     }
     /**
      *
-     * @param {String} name ชื่อห้องเรียน.
+     * @param {string} name ชื่อห้องเรียน.
      */
-    static setClassName(name) {
+    setClassName(name) {
         this.data.className = name;
     }
     /**
      *
      * @param {Subject} subject วิชาว่าง
      */
-    static setNullSubject(subject) {
+    setNullSubject(subject) {
         this.data.nullSubject = subject;
     }
     /**
@@ -435,7 +468,7 @@ class ClassData {
      * @param {Date} date วัน.
      * @returns {Subject} วิชา.
      */
-    static getSubjectByDate(date) {
+    getSubjectByDate(date) {
         return this.get(date.getDay()).getSubjectByTime(getTimeMinute(date));
     }
     /**
@@ -443,62 +476,40 @@ class ClassData {
      * @returns startTime
      * @deprecated
      */
-    static getStartTime() {
+    getStartTime() {
         return this.data.startTime;
     }
-    static getClassName() {
+    getClassName() {
         return this.data.className;
     }
-    static getClassId() {
+    getClassId() {
         return this.data.classId;
     }
     /**
      *
      * @returns {Subject} วิชาว่าง.
      */
-    static getNullSubject() {
+    getNullSubject() {
         return this.data.nullSubject;
     }
 }
 class SubjectDay {
     constructor(day) {
-        if (Number.isInteger(day)) {
-            this.day = day;
-            return;
-        }
-        throw new TypeError("Parameter ต้องเป็นจำนวนเต็ม");
+        if (!Number.isInteger(day))
+            throw new TypeError("Parameter ต้องเป็นจำนวนเต็ม");
+        this.day = day;
     }
-    subject = [];
+    subjects = [];
     day;
     startTime = 0;
-    static sd = (function () {
-        let out = [];
-        for (let i = 0; i < 7; i++) {
-            out.push(new SubjectDay(i));
-        }
-        return out;
-    })();
-    static get(day) {
-        if (day != null) {
-            return this.sd[Math.floor(day)];
-        }
-        return this.sd;
-    }
-    /**
-     * อัพเดตเวลาแต่ละคาบของทุกวัน.
-     */
-    static update() {
-        this.sd.forEach((t) => {
-            t.update();
-        });
-    }
+    nullSubject = new Subject("NULL CODE 1");
     /**
      * อัพเดตเวลาแต่ละคาบของวันนี้.
      * method นี้จะถูกเรียกใช้ตอนมีการเรียกใช้ setSubject
      */
     update() {
         let t = this.getStartTime();
-        this.subject.forEach((k) => {
+        this.subjects.forEach((k) => {
             k.setStartTime(t);
             t += k.getWidth();
         });
@@ -508,55 +519,66 @@ class SubjectDay {
      * @param  {Subject[]} subject
      */
     setSubject(subject) {
-        this.subject = subject;
+        this.subjects = subject;
         this.update();
+    }
+    setNullSubject(subject) {
+        this.nullSubject = subject;
     }
     setStartTime(startTime) {
         this.startTime = startTime;
     }
+    getNullSubject() {
+        return this.nullSubject;
+    }
     /**
-     *
-     * @param {Number} p คาบเรียน index.
+     * ระบบมองว่าวิชาไม่มีเป็นวิชาดังตัวอย่าง
+     * ```js
+     * //ภายใน thisDay มีทั้งหมด 8 วิชา เรียกวิชาแรกด้วย thisDay.getSubject(0) และวิชาสุดท้ายด้วย thisDay.getSubject(7)
+     * thisDay.getSubject(-1); // จะได้วิชาจาก nullSubject โดยมีเวลาเริ่มต้นคือ 0:00น. และจบที่ startTime ของ thisDay.
+     * thisDay.getSubject(7); // จะได้วิชาปกติจาก thisDay ในที่นี้จะเป็นวิชาสุดท้ายของ thisDay.
+     * thisDay.getSubject(8); // จะได้วิชาจาก nullSubject โดยมีเวลาเริ่มต้นคือเวลาจบของวิชาสุดท้ายจนถึง 23:59น.
+     * thisDay.getSubject(9); // จะได้ null.
+     * thisDay.getSubject(-2); // จะได้ null.
+     * ```
+     * @param {number} p คาบเรียน index.
      * @returns {Subject} วิชา.
      */
     getSubject(p) {
-        // if period < 0
+        // คาบที่ 0.
         if (p == -1) {
-            let s = ClassData.getNullSubject();
+            let s = this.getNullSubject();
             if (s) {
                 s.setStartTime(0);
-                s.setWidth(this.subject.length > 0 ? this.getStartTime() : 1440);
+                s.setWidth(this.subjects.length > 0 ? this.getStartTime() : dayMinutes);
                 s.setPeriod(-1);
             }
             return s;
         }
-        let out = this.subject[Math.floor(p)];
-        if (out != null) {
-            // Normal value
+        let out = this.subjects[Math.floor(p)];
+        // Normal value
+        if (out != null)
             return out;
-        }
-        else if (p == this.subject.length && p != 0) {
-            // End subject.
-            let s = ClassData.getNullSubject();
-            let last_subject = this.subject[this.subject.length - 1];
+        // End subject.
+        if (p == this.subjects.length && p != 0) {
+            let s = this.getNullSubject();
+            let last_subject = this.subjects[this.subjects.length - 1];
             if (s) {
                 let last_subject_period = last_subject.getPeriod();
                 s.setStartTime((last_subject) ? last_subject.getEndTime() : 0);
                 s.setPeriod((last_subject && last_subject_period) ? last_subject_period + 1 : -1);
-                s.setWidth(1440 - s.getStartTime());
+                s.setWidth(dayMinutes - s.getStartTime());
             }
             return s;
         }
-        else {
-            return null;
-        }
+        return null;
     }
     /**
      *
      * @returns {Subject[]} วิชา
      */
     getSubjectList() {
-        return this.subject;
+        return this.subjects;
     }
     getStartTime() {
         return this.startTime;
@@ -579,26 +601,23 @@ class SubjectDay {
         // in < 500 => -1
         // in 500-549 => 0
         // in 550-599 => 1...
-        if (timeminute < this.getStartTime() || this.subject.length == 0) {
+        if (timeminute < this.getStartTime() || this.subjects.length == 0)
             return -1;
-        }
         let p = 0;
         for (let i of this.getSubjectList()) {
-            if (i.getStartTime() <= timeminute && timeminute < i.getEndTime()) {
+            if (i.getStartTime() <= timeminute && timeminute < i.getEndTime())
                 return p;
-            }
             p++;
         }
         return p;
     }
     /**
      *
-     * @returns {String} ข้อมูลรายวิชาในวันนี้ที่มนุษย์สามารถอ่านได้ง่าย.
+     * @returns {string} ข้อมูลรายวิชาในวันนี้ที่มนุษย์สามารถอ่านได้ง่าย.
      */
     getLocaleSubjectList() {
-        if (!this.getSubjectList().length) {
+        if (!this.getSubjectList().length)
             return "ไม่มีข้อมูล";
-        }
         let out = "";
         this.getSubjectList().forEach((t) => {
             out += `${t.getLocaleSpeakString()}\n\n`;
@@ -608,63 +627,78 @@ class SubjectDay {
     getDay() {
         return this.day;
     }
+    /**
+     * ลบวิชาทั้งหมดออกจากวันนี้
+     */
+    clearSubject() {
+        this.subjects = [];
+    }
 }
-// global current date day.
-const currentDate = new Date();
-var currentDay = currentDate.getDay();
-// global variable.
 /**
- * _เวลาที่เป็นหน่วยนาทีตั้งแต่ 0:00น ถึงปัจจุบัน._
+ * ฟังก์ชันนี้จะรับวัตถุวันมาแล้วจะส่งออกข้อมูลในรูปแบบตัวเลขในหน่วยนาทีตั้งแต่จุดเริ่มต้นของวัน
+ * @param {Date} date วัตถุวันที่อยู่ในแม่พิมพ์ Date
+ * @returns นาทีตั้งแต่จุดเริ่มต้นของวัน
  */
-var currentMinutes;
-var currentSubjectDay = new SubjectDay(0);
-var currentPariod = -1;
-var currentSubject;
+function getTimeMinute(date) {
+    return date.getHours() * 60 + date.getMinutes();
+}
+/**
+ * คำนวนเวลา(ในรูปแบบข้อความ string)จากนาที
+ * @param {number} minute
+ * @returns เวลา
+ * @author Sittipat Tepsutar
+ * @see getDateFromMinute
+ */
+function getLocaleTimeStringFromMinute(minute) {
+    if (minute == Infinity)
+        return "???";
+    let pad = (d) => (d < 10) ? '0' + d.toString() : d.toString();
+    let t1 = getDateFromMinute(minute);
+    return `${pad(t1.getHours())}:${pad(t1.getMinutes())}`;
+}
+/**
+ * ส่งกลับวันจากนาที
+ * @param {number} minute
+ * @returns {Date} วัน
+ * @author Sittipat Tepsutar
+ */
+function getDateFromMinute(minute) {
+    let returndate = new Date();
+    returndate.setHours(Math.floor(minute / 60));
+    returndate.setMinutes(minute % 60);
+    returndate.setSeconds(0);
+    returndate.setMilliseconds(0);
+    return returndate;
+}
 let innerBackgroundColor = Color.dynamic(new Color("#FFFFFF", 0.2), new Color("#000000", 0.2));
+var classData = new ClassData();
+var setDay = null;
 // widget parameter >> ----------------------------------------------------->>>.
 if (args.widgetParameter != null) {
     let cmd = args.widgetParameter.toString().split(" ");
     if (cmd.length == 2 && cmd[0] == "setDay") {
-        let setDay = parseInt(cmd[1]);
-        if (!Number.isNaN(setDay)) {
-            currentDay = setDay;
+        let inSetDay = parseInt(cmd[1]);
+        if (!Number.isNaN(inSetDay)) {
+            setDay = inSetDay;
         }
     }
 }
-// end widget parameter //-------------------------------------------------->>>.
-// [--function declare--]
 // Main
-async function main() {
+async function main(url = data_url) {
     // SET DATA
-    ClassData.setData(await loadData());
-    // SET GLOBAL
-    currentMinutes = getTimeMinute(currentDate);
-    currentSubjectDay = ClassData.get(currentDay);
-    currentPariod = currentSubjectDay.getPeriodByTime(currentMinutes);
-    currentSubject = currentSubjectDay.getSubject(currentPariod);
-    return new Promise((resolve, reject) => {
-        resolve(config.runsInWidget);
-    });
+    classData.update(false, await loadData(url));
+    return config.runsInWidget;
 }
 async function main_widget() {
-    let widget;
-    if (!(args.shortcutParameter)) {
-        try {
-            widget = await rw(false);
-        }
-        catch (e) {
-            throw new Error(e);
-        }
-    }
-    return new Promise((resolve, reject) => {
-        resolve(widget);
-    });
+    let widget = await rw(false);
+    return widget;
 }
-function main_shortcut() {
-    let input = args.shortcutParameter.split(" ");
-    let p = currentPariod;
-    let d = currentDay;
+function main_shortcut(parameter = args.shortcutParameter) {
+    let input = parameter.split(" ");
+    let p = classData.currentPariod;
+    let d = classData.currentDay;
     let command = input[0].toLowerCase().trim();
+    const no_subject = "ไม่มีวิชานี้ในฐานข้อมูล.";
     switch (command) {
         case "getsubject":
         case "getsubjectname":
@@ -688,26 +722,17 @@ function main_shortcut() {
                     break;
                 default: ;
             }
-            let s = ClassData.get(d).getSubject(p);
+            let s = classData.get(d).getSubject(p);
             switch (command) {
                 case "getsubject":
-                    Script.setShortcutOutput(s ? s.getLocaleSpeakString() : "ไม่มีวิชานี้ในฐานข้อมูล.");
-                    break;
+                    return s ? s.getLocaleSpeakString() : no_subject;
                 case "getsubjectname":
-                    Script.setShortcutOutput(s ? s.getName() : "ไม่มีวิชานี้ในฐานข้อมูล.");
-                    break;
+                    return s ? s.getName() ?? "ไม่มีชื่อวิชาในวิชานี้" : no_subject;
                 case "getsubjectclassroom":
-                    if (s && s.getClassroomUrl()) {
-                        Script.setShortcutOutput(s.getClassroomUrl());
-                    }
-                    break;
+                    return s ? s.getClassroomUrl() ?? "ไม่มี classroom url ในวิชานี้" : no_subject;
                 case "getsubjectmeet":
-                    if (s && s.getMeetUrl()) {
-                        Script.setShortcutOutput(s.getMeetUrl());
-                    }
-                    break;
+                    return s ? s.getMeetUrl() ?? "ไม่มี meet url ในวิชานี้" : no_subject;
             }
-            break;
         case "getsubjectlist":
             if (input.length == 2) {
                 try {
@@ -715,8 +740,7 @@ function main_shortcut() {
                 }
                 catch (e) { }
             }
-            Script.setShortcutOutput(ClassData.get(d).getLocaleSubjectList());
-            break;
+            return classData.get(d).getLocaleSubjectList();
         case "getnextsubject":
         case "getnextsubjectclassroom":
         case "getnextsubjectmeet":
@@ -729,26 +753,16 @@ function main_shortcut() {
             else {
                 p++;
             }
-            let ss = currentSubjectDay.getSubject(p);
+            let ss = classData.currentSubjectDay.getSubject(p);
             switch (command) {
                 case "getnextsubject":
-                    Script.setShortcutOutput(ss ? ss.getLocaleSpeakString() : "ไม่มีวิชานี้ในฐานข้อมูล.");
-                    break;
+                    return ss ? ss.getLocaleSpeakString() : no_subject;
                 case "getnextsubjectclassroom":
-                    if (ss && ss.getClassroomUrl()) {
-                        Script.setShortcutOutput(ss.getClassroomUrl());
-                        break;
-                    }
+                    return ss ? ss.getClassroomUrl() ?? "ไม่มี classroom url ในวิชานี้" : no_subject;
                 case "getnextsubjectmeet":
-                    if (ss && ss.getMeetUrl()) {
-                        Script.setShortcutOutput(ss.getMeetUrl());
-                        break;
-                    }
+                    return ss ? ss.getMeetUrl() ?? "ไม่มี meet url ในวิชานี้" : no_subject;
             }
-            break;
-        default:
-            Script.setShortcutOutput("Error : มีบางอย่างผิดพลาด");
-            break;
+        default: return "Error : มีบางอย่างผิดพลาด";
     }
 }
 /**
@@ -795,10 +809,9 @@ async function createWidget() {
         }
         case "large":
             return createLargeWidget(hwid, new Size(widgetLargeSize, widgetLargeSize));
+        default:
+            return null;
     }
-    return new Promise((resolve, reject) => {
-        reject(null);
-    });
 }
 /**
  * สร้าง widget ขนาดเล็ก และค่าในแต่ละ layout
@@ -859,11 +872,11 @@ async function createSmallWidget(hwid, size) {
     // title
     {
         title.layoutVertically();
-        let tc = title.addText("คาบที่ " + (currentPariod + 1));
+        let tc = title.addText("คาบที่ " + (classData.currentPariod + 1));
         tc.font = new Font("default", 9);
         let t0 = title.addText("กำลังเรียนวิชา 📖");
         t0.font = new Font("default", 12);
-        let t1 = title.addText(currentSubject ? currentSubject.getLocaleName() : "NULL");
+        let t1 = title.addText(classData.currentSubject ? classData.currentSubject.getLocaleName() : "NULL");
         t1.textColor = new Color("#0004FF", 1);
         t1.font = new Font("default", 17);
         t1.lineLimit = 1;
@@ -872,7 +885,7 @@ async function createSmallWidget(hwid, size) {
     {
         time0.layoutHorizontally();
         time0.centerAlignContent();
-        let t0 = time0.addText(currentDate.toLocaleDateString());
+        let t0 = time0.addText(classData.currentDate.toLocaleDateString());
         t0.font = new Font("defalut", 10);
         t0.lineLimit = 1;
     }
@@ -880,7 +893,7 @@ async function createSmallWidget(hwid, size) {
     {
         time1.layoutHorizontally();
         time1.centerAlignContent();
-        let t0 = time1.addText(currentSubject ? currentSubject.getLocaleTime() : "NULL");
+        let t0 = time1.addText(classData.currentSubject ? classData.currentSubject.getLocaleTime() : "NULL");
         t0.font = new Font("defalut", 10);
         t0.lineLimit = 1;
     }
@@ -896,9 +909,9 @@ async function createSmallWidget(hwid, size) {
     {
         body1.layoutVertically();
         for (let i = 0; i <= 1; i++) {
-            let ch = currentPariod + i + 1;
+            let ch = classData.currentPariod + i + 1;
             let t0;
-            let s = currentSubjectDay.getSubject(ch);
+            let s = classData.currentSubjectDay.getSubject(ch);
             t0 = body1.addText(s ? `: ${s.getName()}` : ": ");
             t0.font = new Font("default", 10);
             t0.lineLimit = 1;
@@ -918,14 +931,12 @@ async function createSmallWidget(hwid, size) {
     {
         end.layoutHorizontally();
         end.addSpacer();
-        let t0 = end.addText("⚠️ตามตารางเรียนของ " + ClassData.getClassName());
+        let t0 = end.addText("⚠️ตามตารางเรียนของ " + classData.getClassName());
         t0.font = new Font("default", 8);
         t0.lineLimit = 1;
         end.addSpacer();
     }
-    return new Promise((resolve, reject) => {
-        hwid ? resolve(hwid) : reject(null);
-    });
+    return hwid;
 }
 /**
  * สร้าง widget ขนาดกลาง และค่าในแต่ละ layout
@@ -1169,7 +1180,7 @@ async function createMediumWidget(widget, size) {
     w_teacher.font = w_room.font = w_time.font = normalFont;
     //a2_b1_c1_d1_text/design
     a2_b1_c1_d1_e1.addSpacer();
-    let w_date = a2_b1_c1_d1_e1.addDate(currentDate);
+    let w_date = a2_b1_c1_d1_e1.addDate(classData.currentDate);
     a2_b1_c1_d1_e1.addSpacer();
     w_date.lineLimit = 1;
     w_date.font = Font.mediumRoundedSystemFont(15);
@@ -1206,15 +1217,15 @@ async function createMediumWidget(widget, size) {
     w_next_teacher.lineLimit = w_next_room.lineLimit = w_next_time.lineLimit = 1;
     w_next_teacher.font = w_next_room.font = w_next_time.font = normalFont;
     //value set >>>>>
-    let currentMeet = currentSubject ? currentSubject.getMeetUrl() : null;
-    let currentClassromm = currentSubject ? currentSubject.getClassroomUrl() : null;
-    let nextSubject = currentSubjectDay.getSubject(currentPariod + 1);
+    let currentMeet = classData.currentSubject ? classData.currentSubject.getMeetUrl() : null;
+    let currentClassromm = classData.currentSubject ? classData.currentSubject.getClassroomUrl() : null;
+    let nextSubject = classData.currentSubjectDay.getSubject(classData.currentPariod + 1);
     let nextMeet = nextSubject ? nextSubject.getMeetUrl() : null;
     let nextClassroom = nextSubject ? nextSubject.getClassroomUrl() : null;
-    w_classname.text = `ชื่อ ${ClassData.getClassName()}`;
-    w_period.text = `คาบที่ ${currentPariod + 1}`;
+    w_classname.text = `ชื่อ ${classData.getClassName()}`;
+    w_period.text = `คาบที่ ${classData.currentPariod + 1}`;
     w_subject_text.text = `กำลังเรียนวิชา 📖`;
-    w_subject.text = currentSubject ? currentSubject.getLocaleName() : "NULL";
+    w_subject.text = classData.currentSubject ? classData.currentSubject.getLocaleName() : "NULL";
     if (currentMeet) {
         w_meet.text = "เข้าประชุม";
         w_meet.url = currentMeet;
@@ -1226,9 +1237,9 @@ async function createMediumWidget(widget, size) {
     w_teacher_text.text = w_next_teacher_text.text = "ผู้สอน";
     w_room_text.text = w_next_room_text.text = "เรียนที่";
     w_time_text.text = w_next_time_text.text = "เวลา";
-    w_teacher.text = currentSubject ? `: ${currentSubject.getLocaleTeacherName()}` : "ERROR:NULL";
-    w_room.text = currentSubject ? `: ${currentSubject.getLocaleRoomId()}` : "ERROR:NULL";
-    w_time.text = currentSubject ? `: ${currentSubject.getLocaleTime()}` : "ERROR:NULL";
+    w_teacher.text = classData.currentSubject ? `: ${classData.currentSubject.getLocaleTeacherName()}` : "ERROR:NULL";
+    w_room.text = classData.currentSubject ? `: ${classData.currentSubject.getLocaleRoomId()}` : "ERROR:NULL";
+    w_time.text = classData.currentSubject ? `: ${classData.currentSubject.getLocaleTime()}` : "ERROR:NULL";
     w_next_teacher.text = nextSubject ? `: ${nextSubject.getLocaleTeacherName()}` : ":";
     w_next_room.text = nextSubject ? `: ${nextSubject.getLocaleRoomId()}` : ":";
     w_next_time.text = nextSubject ? `: ${nextSubject.getLocaleTime()}` : ":";
@@ -1242,9 +1253,7 @@ async function createMediumWidget(widget, size) {
         w_next_classroom.text = "เข้าห้องเรียน";
         w_next_classroom.url = nextClassroom;
     }
-    return new Promise((resolve, reject) => {
-        resolve(widget);
-    });
+    return widget;
 }
 /**
  * สร้าง widget ขนาดเล็ก และค่าในแต่ละ layout
@@ -1373,21 +1382,21 @@ async function createLargeWidget(hwid, size) {
     //b0 layout , value set
     for (let i = 0; i <= 3; i++) {
         let ci = i;
-        if (currentPariod == -1) {
+        if (classData.currentPariod == -1) {
             ci++;
         }
-        let ch = currentPariod + ci;
+        let ch = classData.currentPariod + ci;
         let b0i = b0.addStack();
         b0i.centerAlignContent();
         b0i.size = new Size(b0.size.width, b0.size.height / 4);
         let t;
-        if (currentSubjectDay.getSubject(ch - 1)) {
+        if (classData.currentSubjectDay.getSubject(ch - 1)) {
             t = b0i.addText(ch.toString());
         }
         else {
             t = b0i.addText("");
         }
-        if (currentPariod + 1 == ch) {
+        if (classData.currentPariod + 1 == ch) {
             t.font = pf;
             t.textColor = pc;
         }
@@ -1398,17 +1407,20 @@ async function createLargeWidget(hwid, size) {
     //b1 layout , value set
     for (let i = 0; i <= 3; i++) {
         let ci = i;
-        if (currentPariod == -1) {
+        if (classData.currentPariod == -1) {
             ci++;
         }
-        let ch = currentPariod + ci;
+        let ch = classData.currentPariod + ci;
         let bi = b1.addStack();
         bi.centerAlignContent();
         bi.size = new Size(b1.size.width, b1.size.height / 4);
         let t;
-        let s = currentSubjectDay.getSubject(ch - 1);
+        let s = classData.currentSubjectDay.getSubject(ch - 1);
         t = bi.addText(s ? s.getLocaleName() : "");
-        if (currentPariod + 1 == ch) {
+        let url = s?.getClassroomUrl();
+        if (url)
+            t.url = url;
+        if (classData.currentPariod + 1 == ch) {
             t.font = pf;
             t.textColor = pc;
         }
@@ -1421,18 +1433,18 @@ async function createLargeWidget(hwid, size) {
     //b2 layout , value set
     for (let i = 0; i <= 3; i++) {
         let ci = i;
-        if (currentPariod == -1) {
+        if (classData.currentPariod == -1) {
             ci++;
         }
-        let ch = currentPariod + ci;
+        let ch = classData.currentPariod + ci;
         let bi = b2.addStack();
         bi.centerAlignContent();
         bi.size = new Size(b2.size.width, b2.size.height / 4);
         let t;
-        let s = currentSubjectDay.getSubject(ch - 1);
+        let s = classData.currentSubjectDay.getSubject(ch - 1);
         t = bi.addText(s ? s.getLocaleTime() : "");
         bi.addSpacer();
-        if (currentPariod + 1 == ch) {
+        if (classData.currentPariod + 1 == ch) {
             t.font = pf;
             t.textColor = pc;
         }
@@ -1451,13 +1463,13 @@ async function createLargeWidget(hwid, size) {
     h2.addText("เวลา").font = f;
     h1.addSpacer();
     //title1... value set
-    let ct = title10.addText("คาบที่ " + (currentPariod + 1).toString());
+    let ct = title10.addText("คาบที่ " + (classData.currentPariod + 1).toString());
     ct.font = new Font("Arial", 10);
     ct.lineLimit = 1;
     let t1T0 = title10.addText("กำลังเรียนวิชา 📖");
     t1T0.font = new Font("default", 15);
     t1T0.textColor = new Color("#FFFFAA", 1);
-    let s = title10.addText(currentSubject ? currentSubject.getLocaleName() : "NULL");
+    let s = title10.addText(classData.currentSubject ? classData.currentSubject.getLocaleName() : "NULL");
     s.font = Font.boldSystemFont(18);
     s.textColor = Color.dynamic(new Color("#3333FF", 1), new Color("#BBBBFF", 1));
     s.lineLimit = 1;
@@ -1469,7 +1481,7 @@ async function createLargeWidget(hwid, size) {
         let ct1 = title110_name.addText("เรียนที่");
         ct1.font = new Font("default", 12);
         ct1.lineLimit = 1;
-        let ct2 = title111_name.addText("ผู้กำกับ");
+        let ct2 = title111_name.addText("ผู้สอน");
         ct2.font = new Font("default", 12);
         ct2.lineLimit = 1;
         title111_name.addSpacer();
@@ -1477,24 +1489,24 @@ async function createLargeWidget(hwid, size) {
     {
         let this_font = new Font("default", 12);
         let ct1;
-        ct1 = title110_value.addText(currentSubject?.getRoomId() ? `: ${currentSubject.getRoomId()}` : `: `);
+        ct1 = title110_value.addText(classData.currentSubject?.getRoomId() ? `: ${classData.currentSubject.getRoomId()}` : `: `);
         ct1.font = this_font;
         ct1.lineLimit = 1;
         let ct2;
-        ct2 = title111_value.addText(currentSubject?.getTeacher() ? `: ${currentSubject.getLocaleTeacherName()}` : `: `);
+        ct2 = title111_value.addText(classData.currentSubject?.getTeacher() ? `: ${classData.currentSubject.getLocaleTeacherName()}` : `: `);
         ct2.font = this_font;
         ct2.lineLimit = 1;
         title111_value.addSpacer();
     }
     //info value set
     cname.centerAlignContent();
-    let cnameT = cname.addText("⚠️ตามตารางเรียนของ " + ClassData.getClassName());
+    let cnameT = cname.addText("⚠️ตามตารางเรียนของ " + classData.getClassName());
     cnameT.font = new Font("default", 10);
     cnameT.centerAlignText();
     //hello value
     hello.layoutHorizontally();
     hello.bottomAlignContent();
-    let helloT = hello.addText(getWelcome(currentMinutes));
+    let helloT = hello.addText(getWelcome(classData.currentMinutes));
     {
         let font = Font.boldSystemFont(16);
         helloT.font = font;
@@ -1502,7 +1514,7 @@ async function createLargeWidget(hwid, size) {
         helloT.minimumScaleFactor = 0.2;
     }
     // day value
-    let dayT = day.addDate(currentDate);
+    let dayT = day.addDate(classData.currentDate);
     {
         let font = Font.boldSystemFont(16);
         dayT.font = font;
@@ -1517,9 +1529,7 @@ async function createLargeWidget(hwid, size) {
     time.centerAlignContent();
     timeT.textColor = new Color("FFFF00", 1);
     //complete
-    return new Promise((resolve, reject) => {
-        hwid ? resolve(hwid) : reject(null);
-    });
+    return hwid;
 }
 /**
  * setWidget
@@ -1533,47 +1543,9 @@ async function rw(notify) {
         n.body = `${Script.name()} is refresh ; ${config.widgetFamily};`;
         n.sound = "event";
         n.addAction("Debug 1", "scriptable:///open/" + encodeURI(Script.name()));
-        n.schedule();
+        await n.schedule();
     }
-    return new Promise((f, r) => {
-        widget ? f(widget) : r(null);
-    });
-}
-/**
- * ส่งกลับวันจากนาที
- * @param {number} minute
- * @returns {Date} วัน
- * @author Sittipat Tepsutar
- */
-function getDateFromMinute(minute) {
-    let returndate = new Date();
-    returndate.setHours(Math.floor(minute / 60));
-    returndate.setMinutes(minute % 60);
-    returndate.setSeconds(0);
-    returndate.setMilliseconds(0);
-    return returndate;
-}
-/**
- * คำนวนเวลา(ในรูปแบบข้อความ string)จากนาที
- * @param {number} minute
- * @returns เวลา
- * @author Sittipat Tepsutar
- * @see getDateFromMinute
- */
-function getLocalTimeStringFromMinute(minute) {
-    if (minute == Infinity)
-        return "00:00";
-    let pad = (d) => (d < 10) ? '0' + d.toString() : d.toString();
-    let t1 = getDateFromMinute(minute);
-    return `${pad(t1.getHours())}:${pad(t1.getMinutes())}`;
-}
-/**
- * ฟังก์ชันนี้จะรับวัตถุวันมาแล้วจะส่งออกข้อมูลในรูปแบบตัวเลขในหน่วยนาทีตั้งแต่จุดเริ่มต้นของวัน
- * @param {Date} date วัตถุวันที่อยู่ในแม่พิมพ์ Date
- * @returns นาทีตั้งแต่จุดเริ่มต้นของวัน
- */
-function getTimeMinute(date) {
-    return date.getHours() * 60 + date.getMinutes();
+    return widget;
 }
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -1629,7 +1601,7 @@ async function getRandomBackgroundImage(forceUrl) {
         urlList.sort(() => Math.random() - 0.5);
     }
     //store Image
-    let img;
+    let img = null;
     let errorInfo = "";
     for (let t of urlList) {
         try {
@@ -1638,13 +1610,11 @@ async function getRandomBackgroundImage(forceUrl) {
             break;
         }
         catch (error) {
-            errorInfo += `Skip ${t} : ${error.message}\n`;
+            errorInfo += `Skip ${t} : an error occurred\n`;
         }
     }
     errorInfo && await notific("Error", errorInfo);
-    return new Promise((resolve, reject) => {
-        img ? resolve(img) : reject(null);
-    });
+    return img;
 }
 function getOfflineBackGroundColor(index = getRndInteger(0, 5)) {
     let colors = [
@@ -1699,12 +1669,13 @@ function getSplashText() {
 // end function declare
 if (config.runsInWidget || args.shortcutParameter) {
     if (await main()) {
-        let t = await main_widget();
-        Script.setWidget(t);
+        let widget = await main_widget();
+        if (widget)
+            Script.setWidget(widget);
     }
     else if (args.shortcutParameter) {
-        main_shortcut();
+        Script.setShortcutOutput(main_shortcut(args.shortcutParameter));
     }
     Script.complete();
 }
-// END
+export {};
