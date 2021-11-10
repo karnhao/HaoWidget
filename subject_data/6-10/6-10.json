@@ -1,8 +1,290 @@
 {
-    "classId": 72610,
+    "classId": "72610",
     "className": "ม.6/10",
     "nullSubject": {
-        "name": "❌ไม่มี"
+        "width": 0,
+        "startTime": 0,
+        "period": -1,
+        "name": "❌ไม่มี",
+        "id": null,
+        "roomId": null,
+        "teacher": null,
+        "classroom": null,
+        "meet": null
     },
-    "subjectList": {}
+    "subjectList": {
+        "_2": {
+            "subjectList": [
+                {
+                    "name": "✨ศึกษาด้วยตนเอง",
+                    "id": null,
+                    "width": 200,
+                    "classroom": null,
+                    "meet": null,
+                    "roomId": null,
+                    "teacher": null
+                },
+                {
+                    "name": "🍗พักกลางวัน",
+                    "id": null,
+                    "width": 50,
+                    "classroom": null,
+                    "meet": null,
+                    "roomId": null,
+                    "teacher": null
+                },
+                {
+                    "name": "✨ศึกษาด้วยตนเอง",
+                    "id": null,
+                    "width": 50,
+                    "classroom": null,
+                    "meet": null,
+                    "roomId": null,
+                    "teacher": null
+                }
+            ],
+            "startTime": 500
+        },
+        "_1": {
+            "subjectList": [
+                {
+                    "name": "🧪วิทยาศาสตร์กายภาพ1",
+                    "id": "ว30102",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzNDg3OTA3ODcz",
+                    "meet": "https://meet.google.com/lookup/bvurl35k7l",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูพิชามญชุ์ เลิศความเพียร"
+                    ]
+                },
+                {
+                    "name": "🎨ศิลปะ",
+                    "id": "ศ33108",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/NDE2MzAzNTM2MTE2",
+                    "meet": "https://meet.google.com/shz-rxzg-caz",
+                    "roomId": null,
+                    "teacher": [
+                        "Kru. Thunchanok Arunyig"
+                    ]
+                },
+                {
+                    "name": "➗เสริมทักษะคณิตศาสตร์",
+                    "id": "ค33202",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQ0NDUwOTI3NDg3",
+                    "meet": "https://meet.google.com/lookup/fzlpggguc6",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูอรนันท์ จันทร์ประภาพ"
+                    ]
+                },
+                {
+                    "name": "➗วิทยาศาสตร์กายภาพ2",
+                    "id": "ว30103",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzMTg1Njc1MDk1",
+                    "meet": "https://meet.google.com/yiw-wvnv-kiq",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูวนิดา หลากจิตร"
+                    ]
+                },
+                {
+                    "name": "🍗พักกลางวัน",
+                    "id": null,
+                    "width": 50,
+                    "classroom": null,
+                    "meet": null,
+                    "roomId": null,
+                    "teacher": null
+                },
+                {
+                    "name": "🏃‍♂️สุขศึกษา และ พละศึกษา",
+                    "id": null,
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQ3MTA1NDM1NTE2",
+                    "meet": "https://meet.google.com/lookup/cgxa7nqjtg",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูทิพรวี เตชะหงษา"
+                    ]
+                },
+                {
+                    "name": "🏳อังกฤษหลัก",
+                    "id": "อ33102",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQwMjg1NzcyODkz",
+                    "meet": "https://meet.google.com/lookup/au3v6qgnon",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูศรานตา กฤษฎาสิมะ"
+                    ]
+                }
+            ],
+            "startTime": 500
+        },
+        "_5": {
+            "subjectList": [
+                {
+                    "name": "🏳English Conversation",
+                    "id": "อ33206",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQ2OTc4NTIxNzA0",
+                    "meet": null,
+                    "roomId": null,
+                    "teacher": [
+                        "Mr. Jomer Fonclara Piang"
+                    ]
+                },
+                {
+                    "name": "➗วิทยาศาสตร์กายภาพ2",
+                    "id": "ว30103",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzMTg1Njc1MDk1",
+                    "meet": "https://meet.google.com/yiw-wvnv-kiq",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูวนิดา หลากจิตร"
+                    ]
+                },
+                {
+                    "name": "✨ชมรม 6",
+                    "id": null,
+                    "width": 50,
+                    "classroom": null,
+                    "meet": null,
+                    "roomId": null,
+                    "teacher": null
+                },
+                {
+                    "name": "จริยธรรม 6",
+                    "id": null,
+                    "width": 50,
+                    "classroom": null,
+                    "meet": null,
+                    "roomId": null,
+                    "teacher": null
+                },
+                {
+                    "name": "🍗พักกลางวัน",
+                    "id": null,
+                    "width": 50,
+                    "classroom": null,
+                    "meet": null,
+                    "roomId": null,
+                    "teacher": null
+                },
+                {
+                    "name": "🌱วิทยาศาสตร์ชีวภาพ",
+                    "id": "ว30101",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/NDE4OTc1NjY0MDk0",
+                    "meet": "https://meet.google.com/cce-ceuj-cbv",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูพรพิมล จงรักวิทย์"
+                    ]
+                }
+            ],
+            "startTime": 500
+        },
+        "_3": {
+            "subjectList": [
+                {
+                    "name": "📚การงานอาชีพและแนะแนว",
+                    "id": null,
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzMjg3MzI5Nzcz",
+                    "meet": "https://meet.google.com/tkj-fzbd-qqn",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูสุพัตรา อินทร์ศร"
+                    ]
+                },
+                {
+                    "name": "🌏วิทยาศาสตร์โลกและดาราศาสตร์",
+                    "id": "ว30104",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzM5NDI5OTY4ODY2",
+                    "meet": "https://meet.google.com/iqh-efwe-hpu",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูธาราดล สิงห์สูงเนิน"
+                    ]
+                },
+                {
+                    "name": "📚ประวัติศาสตร์ 2",
+                    "id": "ส33102",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/NDE5MzQyMjU2OTMx",
+                    "meet": "https://meet.google.com/miv-gobz-sez",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูธเนศ วิริยะมนตรี"
+                    ]
+                },
+                {
+                    "name": "➗เสริมทักษะคณิตศาสตร์",
+                    "id": "ค33202",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQ0NDUwOTI3NDg3",
+                    "meet": "https://meet.google.com/lookup/fzlpggguc6",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูอรนันท์ จันทร์ประภาพ"
+                    ]
+                },
+                {
+                    "name": "🍗พักกลางวัน",
+                    "id": null,
+                    "width": 50,
+                    "classroom": null,
+                    "meet": null,
+                    "roomId": null,
+                    "teacher": null
+                },
+                {
+                    "name": "➗คณิตศาสตร์ O-Net1",
+                    "id": "ค33210",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQ3MTU0OTMxOTgw",
+                    "meet": "https://meet.google.com/lookup/ddl73qeq26",
+                    "roomId": null,
+                    "teacher": [
+                        "Math LJK Chanel"
+                    ]
+                },
+                {
+                    "name": "🌱วิทยาศาสตร์ชีวภาพ",
+                    "id": "ว30101",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/NDE4OTc1NjY0MDk0",
+                    "meet": "https://meet.google.com/cce-ceuj-cbv",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูพรพิมล จงรักวิทย์"
+                    ]
+                }
+            ],
+            "startTime": 500
+        },
+        "_6": {
+            "subjectList": [
+                {
+                    "name": "🎨ศิลปะ",
+                    "id": "ศ33108",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/NDE2MzAzNTM2MTE2",
+                    "meet": "https://meet.google.com/shz-rxzg-caz",
+                    "roomId": null,
+                    "teacher": [
+                        "Kru. Thunchanok Arunyig"
+                    ]
+                }
+            ],
+            "startTime": 450
+        }
+    }
 }
