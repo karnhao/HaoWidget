@@ -1678,4 +1678,3 @@ if (config.runsInWidget || args.shortcutParameter) {
     }
     Script.complete();
 }
-export {};
