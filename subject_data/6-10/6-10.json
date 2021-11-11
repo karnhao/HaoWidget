@@ -2,15 +2,13 @@
     "classId": "72610",
     "className": "ม.6/10",
     "nullSubject": {
-        "width": 0,
-        "startTime": 0,
-        "period": -1,
         "name": "❌ไม่มี",
         "id": null,
-        "roomId": null,
-        "teacher": null,
+        "width": 0,
         "classroom": null,
-        "meet": null
+        "meet": null,
+        "roomId": null,
+        "teacher": null
     },
     "subjectList": {
         "_2": {
@@ -285,6 +283,87 @@
                 }
             ],
             "startTime": 450
+        },
+        "_4": {
+            "subjectList": [
+                {
+                    "name": "➗พบที่ปรึกษา 6",
+                    "id": null,
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQ3MDU4MjM3NDMy",
+                    "meet": "https://meet.google.com/lookup/cbr2fdju7x",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูณัฐพล มั่นเรือง",
+                        "ครูอรนันท์ จันทร์ประภาพ"
+                    ]
+                },
+                {
+                    "name": "👨‍💻วิทยาการคำนวณ",
+                    "id": "ว33108",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQyNTI0MDMxMjkx",
+                    "meet": "https://meet.google.com/kgj-ctwf-kfe",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูอักษราภัค สิทธิพรรัตนมณี"
+                    ]
+                },
+                {
+                    "name": "🧪วิทยาศาสตร์กายภาพ1",
+                    "id": "ว30102",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzNDg3OTA3ODcz",
+                    "meet": "https://meet.google.com/lookup/bvurl35k7l",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูพิชามญชุ์ เลิศความเพียร"
+                    ]
+                },
+                {
+                    "name": "📖ภาษาไทย",
+                    "id": "ท33102",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzNTMzMDUzOTEx",
+                    "meet": "https://meet.google.com/ivp-dbhn-ric",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูสุวิมล เพ็ชรไพโรจน์"
+                    ]
+                },
+                {
+                    "name": "🍗พักกลางวัน",
+                    "id": null,
+                    "width": 50,
+                    "classroom": null,
+                    "meet": null,
+                    "roomId": null,
+                    "teacher": null
+                },
+                {
+                    "name": "🌏วิทยาศาสตร์โลกและดาราศาสตร์",
+                    "id": "ว30104",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzM5NDI5OTY4ODY2",
+                    "meet": "https://meet.google.com/iqh-efwe-hpu",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูธาราดล สิงห์สูงเนิน"
+                    ]
+                },
+                {
+                    "name": "🏳Successful Reading & Writing",
+                    "id": "อ33206",
+                    "width": 50,
+                    "classroom": "https://classroom.google.com/c/MzQzMzYxMzc1ODUx",
+                    "meet": "https://meet.google.com/lookup/bnq26pd4ng",
+                    "roomId": null,
+                    "teacher": [
+                        "ครูพิชฎาณัฏฐ์ มหาชัย"
+                    ]
+                }
+            ],
+            "startTime": 500
         }
     }
 }
