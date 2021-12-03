@@ -1131,7 +1131,7 @@ async function createMediumWidget(widget: ListWidget, size: Size): Promise<ListW
     a1_b1_c2_d2_e2.size = new Size(a1_b1_c2_d2.size.width * 1 / 2, a1_b1_c2_d2.size.height);
 
     a1_b1_c2_d2_e1.layoutVertically();
-    a1_b1_c2_d2_e2.layoutHorizontally();
+    a1_b1_c2_d2_e2.layoutVertically();
 
     a1_b1_c2_d2_e1.setPadding(0, 4, 0, 0);
     a1_b1_c2_d2_e2.setPadding(0, 0, 0, 4);
@@ -1300,6 +1300,7 @@ async function createMediumWidget(widget: ListWidget, size: Size): Promise<ListW
     //a1_b1_c2_d2_e2_text/design
     a1_b1_c2_d2_e2.addSpacer();
     let w_classroom = a1_b1_c2_d2_e2.addText("");
+    a1_b1_c2_d2_e2.addSpacer();
     w_classroom.lineLimit = 1;
     w_classroom.font = urlFont;
     w_classroom.textColor = urlColor;
