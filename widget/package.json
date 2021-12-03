@@ -7,7 +7,7 @@
   "description": "Widget",
   "main": "haowidget.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rd /s /q dist && mkdir dist && tsc -p ts/tsconfig.json"
   },
   "author": "Sittipat Tepsutar",
   "license": "MIT",
