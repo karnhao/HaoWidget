@@ -1163,6 +1163,7 @@ async function createMediumWidget(widget, size) {
     //a1_b1_c2_d2_e2_text/design
     a1_b1_c2_d2_e2.addSpacer();
     let w_classroom = a1_b1_c2_d2_e2.addText("");
+    a1_b1_c2_d2_e2.addSpacer();
     w_classroom.lineLimit = 1;
     w_classroom.font = urlFont;
     w_classroom.textColor = urlColor;
