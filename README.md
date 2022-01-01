@@ -28,3 +28,10 @@ widget แสดงวิชา
 > - กดข้างที่ Widget นั้นและกด "Edit Widget"
 > - กดที่ตัวเลือก "Script" และเลือก Script นี้
 > - ออก
+## การรองรับ
+#iOS
+> - iOS 15 ขึ้นไป
+#iPadOS
+> - iPadOS 15 ขึ้นไป
+#MacOS (BETA)
+> - MacOS Monterey 12 ขึ้นไป 
