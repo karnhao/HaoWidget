@@ -29,14 +29,11 @@ widget แสดงวิชา
 > - กดที่ตัวเลือก "Script" และเลือก Script นี้
 > - ออก
 ## การรองรับ
-#iOS
-
+### iOS
 > - iOS 15 ขึ้นไป
 
-#iPadOS
-
+### iPadOS
 > - iPadOS 15 ขึ้นไป
 
-#MacOS (BETA)
-
+### MacOS (BETA)
 > - MacOS Monterey 12 ขึ้นไป 
