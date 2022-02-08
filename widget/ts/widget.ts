@@ -57,7 +57,7 @@ const allow_replace: Boolean = true;   /* ถ้า true ระบบจะโ�
 
 // code >>
 
-var widgetFamily: string = config.widgetFamily;
+var widgetFamily: string = config.widgetFamily ?? "small";
 Notification.removeAllPending();
 
 const widgetBuilder = {
