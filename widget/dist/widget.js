@@ -49,7 +49,7 @@ const allow_replace = true; /* ถ้า true ระบบจะโหลดไ�
                                           ถ้า false ระบบจะไม่โหลดไฟล์ใหม่ถ้ามีไฟล์เดิมอยู่แล้ว
                                           false จะ ใช้ในกรณีมีอินเทอร์เน็ตจำกัด (คำเตือน ต้องเพิ่ม bookmark ที่ชื่อว่า HaoWidget ในแอพ Scriptable ก่อน โดยไปเพิ่มได้ที่การตั้งค่าภายในแอพ Scriptable ไม่เช่นนั้นระบบจะโหลดข้อมูลเก็บไว้ไม่ได้).*/
 // code >>
-var widgetFamily = config.widgetFamily;
+var widgetFamily = config.widgetFamily ?? "small";
 Notification.removeAllPending();
 const widgetBuilder = {
     small: {}
@@ -404,13 +404,14 @@ class ClassData {
         showMessage && console.log("Storing subject to memory...");
         for (let i = 0; i < 7; i++) {
             this.get(i).setNullSubject(this.getNullSubject());
-            let f = new Function('data', `return data.subjectList._${i};`);
+            let f = new Function('data', `return data.${(object.subjectDays != null) ? "subjectDays" : "subjectList"}._${i};`);
             let sl = f(object);
             sl?.startTime && this.get(i).setStartTime(sl?.startTime);
             if (!Array.isArray(sl?.subjectList) || sl?.subjectList.length == 0) {
                 this.get(i).clearSubject();
                 continue;
             }
+            // if (object.subjectList != null) {...}//warn
             showMessage && console.log(`#===============[Day ${i}]================#`);
             let s = [];
             let k = 0;
@@ -1671,8 +1672,12 @@ function getSplashText() {
 if (config.runsInWidget || args.shortcutParameter) {
     if (await main()) {
         let widget = await main_widget();
-        if (widget)
+        if (widget) {
+            let reload = classData.currentSubjectDay.getSubject(classData.currentPariod + 1)?.getEndTime();
+            if (reload)
+                widget.refreshAfterDate = getDateFromMinute(reload);
             Script.setWidget(widget);
+        }
     }
     else if (args.shortcutParameter) {
         Script.setShortcutOutput(main_shortcut(args.shortcutParameter));

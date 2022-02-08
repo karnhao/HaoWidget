@@ -11,5 +11,8 @@
   },
   "author": "Sittipat Tepsutar",
   "license": "MIT",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "haosj": "^1.3.1"
+  }
 }
