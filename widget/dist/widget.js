@@ -1673,7 +1673,7 @@ if (config.runsInWidget || args.shortcutParameter) {
     if (await main()) {
         let widget = await main_widget();
         if (widget) {
-            let reload = classData.currentSubjectDay.getSubject(classData.currentPariod + 1)?.getEndTime();
+            let reload = classData.currentSubjectDay.getSubject(classData.currentPariod + 1)?.getStartTime();
             if (reload)
                 widget.refreshAfterDate = getDateFromMinute(reload);
             Script.setWidget(widget);
