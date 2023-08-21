@@ -1,3 +1,4 @@
+import { RawClassData, RawSubjectDay } from "haosj";
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
 // icon-color: deep-gray; icon-glyph: magic;
@@ -56,12 +57,12 @@ const allow_replace: Boolean = true;   /* ถ้า true ระบบจะโ�
 
 // code >>
 
-var widgetFamily: string = config.widgetFamily;
+var widgetFamily: string = config.widgetFamily ?? "small";
 Notification.removeAllPending();
 
 const widgetBuilder = {
     small: {
-        
+
     }
 }
 
@@ -105,36 +106,7 @@ async function loadData(url = data_url): Promise<any> {
         resolve(raw_json);
     })
 }
-interface RawSubject {
-    id?: string,
-    name: string,
-    teacher?: string[],
-    roomId?: string,
-    width?: number,
-    classroom?: string,
-    meet?: string
-}
 
-interface RawSubjectDay {
-    day?: number,
-    startTime: number,
-    subjectList: RawSubject[]
-}
-
-interface RawClassData {
-    classId: string;
-    className: string;
-    nullSubject: RawSubject,
-    subjectList: {
-        _0?: RawSubjectDay,
-        _1?: RawSubjectDay,
-        _2?: RawSubjectDay,
-        _3?: RawSubjectDay,
-        _4?: RawSubjectDay,
-        _5?: RawSubjectDay,
-        _6?: RawSubjectDay
-    }
-}
 const dayMinutes = 1439;
 class Subject {
     private width: number = 0;
@@ -450,10 +422,11 @@ class ClassData {
         showMessage && console.log("Storing subject to memory...");
         for (let i = 0; i < 7; i++) {
             this.get(i).setNullSubject(this.getNullSubject());
-            let f = new Function('data', `return data.subjectList._${i};`);
+            let f = new Function('data', `return data.${(object.subjectDays != null) ? "subjectDays" : "subjectList"}._${i};`);
             let sl: RawSubjectDay = f(object);
             sl?.startTime && this.get(i).setStartTime(sl?.startTime);
             if (!Array.isArray(sl?.subjectList) || sl?.subjectList.length == 0) { this.get(i).clearSubject(); continue }
+            // if (object.subjectList != null) {...}//warn
             showMessage && console.log(`#===============[Day ${i}]================#`);
             let s: Subject[] = [];
             let k = 0;
@@ -1901,18 +1874,17 @@ function getSplashText(): string {
 if (config.runsInWidget || args.shortcutParameter) {
     if (await main()) {
         let widget = await main_widget();
-        if (widget) Script.setWidget(widget);
+        if (widget) {
+            let reload = classData.currentSubjectDay.getSubject(classData.currentPariod + 1)?.getStartTime();
+            if (reload) widget.refreshAfterDate = getDateFromMinute(reload);
+            Script.setWidget(widget);
+        }
     } else if (args.shortcutParameter) {
         Script.setShortcutOutput(main_shortcut(args.shortcutParameter));
     }
     Script.complete();
 }
 
-// module.exports.getWidget = async (url: string) => {
-//     await main(url);
-//     return await main_widget();
-// };
-// module.exports.shortcut = main_shortcut;
 // END
 
 // Make this file a module :(
